@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="javascript:;">Order Details</a></li>
+            </ol>
+        </nav>
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                <span class="text-white">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="text-white">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+        {% endfor %}
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4 min-vh-70">
+                    {% if order.delivery_type == 'HOME' %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="container mt-3 mb-5 text-center">
+                                <h6>{{ order.money_type }}</h6>
+                                
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="container text-center">
+                                <h6>Home Name</h6>
+                                <p>{{ order.home_name }}</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="container text-center">
+                                <h6>Mobile</h6>
+                                <p>{{ order.home_mobile }}</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="container text-center">
+                                <h6>Address</h6>
+                                <p>{{ order.address }}</p>
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            <div class="container text-center">
+                                <h6>Quantity</h6>
+                                <p>{{ order.quantity }}</p>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="container text-center">
+                                <h6 >Toatal</h6>
+                                <p>{{ order.total }}</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+    </div>
+{% endblock %}

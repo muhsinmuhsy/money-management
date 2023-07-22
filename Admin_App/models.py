@@ -13,7 +13,7 @@ class Customer(models.Model):
 
 class Order(models.Model):
     MONEY_TYPE = (
-        ('AED to INR' , 'AED to INR'),
+        ('AED to INR' , 'AED to INR'),      
         ('INR to AED' , 'INR to AED'),
     )
     DELIVERY_TYPE = (
