@@ -31,7 +31,7 @@ def collector_add(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         try:
-            user = User(
+            user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
@@ -40,7 +40,6 @@ def collector_add(request):
                 password=password,
                 is_collector=True,
             )
-            user.save()
             messages.success(request, f"The username '{username}' added successfully.")
             return redirect('collector_list')
         except IntegrityError:
@@ -104,7 +103,7 @@ def delivery_boy_add(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         try:
-            user = User(
+            user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
@@ -113,7 +112,6 @@ def delivery_boy_add(request):
                 password=password,
                 is_delivery_boy=True,
             )
-            user.save()
             messages.success(request, f"The username '{username}' added successfully.")
             return redirect('delivery_boy_list')
         except IntegrityError:
@@ -229,7 +227,7 @@ def customer_delete(request, customer_id):
 
 @login_required
 def order_list(request):
-    order = Order.objects.all()
+    order = Order.objects.all().order_by('-id')
     context = {
         'order' : order,
     }

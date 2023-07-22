@@ -43,9 +43,12 @@ class Order(models.Model):
     delivery_boy_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     # HOME
-    delivery_boy_name = models.ForeignKey(User, limit_choices_to={'is_delivery_boy': True},
+    delivery_boy_name = models.ForeignKey(
+        User,
+        limit_choices_to={'is_delivery_boy': True},
         related_name='delivery_boy_orders',
-        on_delete=models.CASCADE, null=True, blank=True)
+        on_delete=models.CASCADE, null=True, blank=True
+    )
     home_name = models.CharField(max_length=500, null=True, blank=True)
     home_mobile = models.CharField(max_length=500, null=True, blank=True)
     home_address = models.CharField(max_length=500, null=True, blank=True)
