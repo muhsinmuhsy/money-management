@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid py-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="javascript:;">Profile</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;"></a></li>
+        </ol>
+      </nav>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+      
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card bg-cover text-center" style="background-image: url('https://demos.creative-tim.com/argon-dashboard-pro-bs4/assets/img/img-3.jpg')">
+            <div class="card-body z-index-2 py-9">
+              <h2 class="text-white">{{ user.username }}</h2>
+              <p class="text-white">
+                {{ user.first_name }} {{ user.last_name }}
+              </p>
+              <label class="badge badge-light text-dark">{{ role }}</label>
+            </div>
+            <div class="mask bg-gradient-primary border-radius-lg"></div>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}
+ 

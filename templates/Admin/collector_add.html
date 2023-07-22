@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid py-4 ">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'collector_list' %}">Collector List</a></li>
+          
+          <li class="breadcrumb-item"><a href="javascript:;">Add</a></li>
+        </ol>
+      </nav>
+      
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+            <span class="alert-text">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      
+      <div class="row">
+        <div class="col-md-12 ">
+          <div class="card">
+            
+            <form method="post" action="{% url 'collector_add' %}">
+              {% csrf_token %}
+              <div class="card-body">
+                <p class="text-uppercase text-sm">Collector Information</p>
+                <div class="row">
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">First Name</label>
+                      <input class="form-control" type="text" name="first_name"  required placeholder="First Name" >
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Last Name</label>
+                      <input class="form-control" type="text" name="last_name" required placeholder="Last Name">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Email</label>
+                      <input class="form-control" type="email" name="email" required placeholder="Email">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Mobile No.</label>
+                      <input class="form-control" type="text" name="mobile_no" required placeholder="Mobile No.">
+                    </div>
+                  </div>
+                </div>
+                <hr class="horizontal dark">
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Username</label>
+                      <input class="form-control" type="text" name="username" required placeholder="Username">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Password</label>
+                      <input class="form-control" type="password" name="password" required placeholder="Password">
+                    </div>
+                  </div>
+                  
+                </div>
+                <div class="card-header pb-0">
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-primary btn-sm ms-auto" type="submit">Submit</button>
+                    </div>
+                  </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+        
+      </div>
+        
+      </div>
+{% endblock %}

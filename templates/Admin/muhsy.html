@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    
+    
+
+    <div class="container-fluid py-4 ">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
+          
+          <li class="breadcrumb-item"><a href="javascript:;">Add</a></li>
+        </ol>
+      </nav>
+      
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+            <span class="alert-text">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      
+      <div class="row">
+            <div class="col-md-12 ">
+                <div class="card">
+                    
+                    <form method="post" action="{% url 'order_edit' order.id %}">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <p class="text-uppercase text-sm">Order Information</p>
+                            <div class="row">
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Date</label>
+                                        <input class="form-control" value="{{ order.date|date:'Y-m-d' }}" type="date" name="date">
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-md-6">
+                                    <div class="form-group mt-2">
+                                        <label for="customer_name">Customer Name:</label>
+                                        <select id="customer_name" name="customer_name" class="form-control" required >
+                                            <option value="">Select Customer</option>
+                                            {% for customer in customers %}
+                                                <option value="{{ customer.id }}" {% if order.customer_name.id == customer.id %} selected {% endif %}>{{ customer.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-12 mt-3 ">
+                                    <h6 class="text-uppercase ">{{ order.money_type }}</h6>
+                                </div>
+
+
+                                <!--- Calculation -->
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Amount</label>
+                                    <input class="form-control" value="{{ order.mrp }}" type="number" name="mrp" id="mrp" placeholder="Amount">
+                                    </div>
+                                </div>
+
+
+                                
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h6 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">X</h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Quantity</label>
+                                    <input class="form-control" value="{{ order.quantity }}" type="number" placeholder="Quantity" name="quantity" id="quantity"   >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h5 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">=</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Toatal</label>
+                                    <input class="form-control" type="number" name="total" id="total"  readonly >
+                                    </div>
+                                </div>
+
+                                <!--End Calculation -->
+
+                                <hr class="horizontal dark mt-3">
+
+                                <div class="col-md-12 mt-3 ">
+                                    <p class="text-uppercase text-sm">Collection Details</p>
+                                </div>
+                                <div class="col-md-6 " style="padding-top: 7px;">
+                                    <div class="form-group " >
+                                        <label for="collector_name">Collection agent:</label>
+                                        <select id="collector_name" name="collector_name" class="form-control" required >
+                                            <option value="">Select Collection Agent</option>
+                                            {% for collector in collectors %}
+                                                <option value="{{ collector.id }}">{{ collector.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <div class="form-group " >
+                                        <label for="example-text-input" class="form-control-label">Amount</label>
+                                        <input class="form-control" type="number" name="collector_amount" id="collector_amount"  readonly >
+                                    </div>
+                                </div>
+                                
+
+
+                                
+
+
+
+
+                            </div>
+    
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+
+
+    
+    
+
+{% endblock %}

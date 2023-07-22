@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid py-4 ">
+
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'customer_list' %}">Customer List</a></li>
+          
+          <li class="breadcrumb-item"><a href="javascript:;">Edit</a></li>
+        </ol>
+      </nav>
+      
+      
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+            <span class="alert-text">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      
+      <div class="row">
+        <div class="col-md-12 ">
+          <div class="card">
+            
+            <form method="post" action="{% url 'customer_edit' customer.id %}">
+              {% csrf_token %}
+              <div class="card-body">
+                <p class="text-uppercase text-sm">Edit customer</p>
+                <div class="row">
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Name</label>
+                      <input class="form-control" type="text" name="name" value="{{ customer.name }}"  required placeholder=" Name" >
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Mobile Number</label>
+                      <input class="form-control" type="text" name="mobile" value="{{ customer.mobile }}" required placeholder="Mobile Number">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Address</label>
+                      <input class="form-control" type="text" name="address" value="{{ customer.address }}" required placeholder="Address">
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+                <div class="card-header pb-0">
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-primary btn-sm ms-auto" type="submit">Submit</button>
+                    </div>
+                  </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+        
+      </div>
+        
+      </div>
+{% endblock %}

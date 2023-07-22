@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    
+    
+
+    <div class="container-fluid py-4 ">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
+          
+          <li class="breadcrumb-item"><a href="javascript:;">Add</a></li>
+        </ol>
+      </nav>
+      
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+            <span class="alert-text">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      
+      <div class="row">
+            <div class="col-md-12 ">
+                <div class="card">
+                    
+                    <form method="post" action="{% url 'order_add' %}">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <p class="text-uppercase text-sm">Order Information</p>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Date</label>
+                                    <input class="form-control" id="date" type="date" name="date"   >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mt-2">
+                                        <label for="customer_name">Customer Name:</label>
+                                        <select id="customer_name" name="customer_name" class="form-control" required >
+                                            <option value="">Select Customer</option>
+                                            {% for customer in customers %}
+                                                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Money Type select  --->
+
+                                <div class="col-md-2 mt-3" >
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <label class="custom-control-label" for="customRadioDisabled">AED to INR</label>
+                                            <input type="radio" id="AedtoInr" onclick="toggleFormSection()" name="money_type" value="AED to INR" id="customRadioDisabled" required class="form-check-input"  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10 mt-3">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <label class="custom-control-label" for="customRadioDisabled">INR to AED</label>
+                                            <input type="radio" id="InrtoAed" onclick="toggleFormSection()" name="money_type" value="INR to AED" id="customRadioDisabled" required class="form-check-input"  >
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!--- Calculation -->
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Amount</label>
+                                    <input class="form-control" type="number" name="mrp" id="mrp" placeholder="Amount">
+                                    </div>
+                                </div>
+
+
+                                
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h6 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">X</h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Quantity</label>
+                                    <input class="form-control" type="number" placeholder="Quantity" name="quantity" id="quantity"   >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h5 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">=</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Toatal</label>
+                                    <input class="form-control" type="number" name="total" id="total"  readonly >
+                                    </div>
+                                </div>
+
+                                <!--End Calculation -->
+
+                                <hr class="horizontal dark mt-3">
+
+                                <div class="col-md-12 mt-3 ">
+                                    <p class="text-uppercase text-sm">Collection Details</p>
+                                </div>
+                                <div class="col-md-6 " style="padding-top: 7px;">
+                                    <div class="form-group " >
+                                        <label for="collector_name">Collection agent:</label>
+                                        <select id="collector_name" name="collector_name" class="form-control" required >
+                                            <option value="">Select Collection Agent</option>
+                                            {% for collector in collectors %}
+                                                <option value="{{ collector.id }}">{{ collector.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <div class="form-group " >
+                                        <label for="example-text-input" class="form-control-label">Amount</label>
+                                        <input class="form-control" type="number" name="collector_amount" id="collector_amount"  readonly >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 pt-3"  >
+                                    <div class="form-check">
+                                        <input type="checkbox" id="show_details" name="show_details" class="form-check-input">
+                                        <label class="custom-control-label" for="customCheck1">Same as Customer:</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text" id="name" name="name" class="form-control" >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="mobile">Mobile:</label>
+                                        <input type="text" id="mobile" name="mobile" class="form-control" >
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Address:</label>
+                                        <input type="text" id="address" name="address" class="form-control" >
+                                    </div>
+                                </div>
+
+                                <hr class="horizontal dark mt-3">
+
+                                <div class="col-md-12 mt-3 ">
+                                    <p class="text-uppercase text-sm">Delivery Details</p>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <label class="custom-control-label" for="customRadioDisabled">HOME</label>
+                                            <input type="radio" id="Home" onclick="toggleFormSectionTwo()" name="delivery_type" value="HOME" id="customRadioDisabled" required class="form-check-input"  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <label class="custom-control-label" for="customRadioDisabled">BANK</label>
+                                            <input type="radio" id="Bank" onclick="toggleFormSectionTwo()" name="delivery_type" value="BANK" id="customRadioDisabled" required class="form-check-input"  >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="padding-top: 7px;">
+                                    <div class="form-group" >
+                                        <label for="delivery_boy_name">Delivery agent:</label>
+                                        <select id="delivery_boy_name" name="delivery_boy_name" class="form-control" required >
+                                            <option value="">Select Delivery Agent</option>
+                                            {% for delivery_boy in delivery_boys %}
+                                                <option value="{{ delivery_boy.id }}">{{ delivery_boy.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <div class="form-group " >
+                                        <label for="example-text-input" class="form-control-label">Amount</label>
+                                        <input class="form-control" type="number" name="delivery_boy_amount" id="delivery_boy_amount"  readonly >
+                                    </div>
+                                </div>
+
+                                <!------------------------------------------------------------>
+
+                                <div class="row" id="IdHome" style="display: none;">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_name">Name:</label>
+                                            <input type="text" id="home_name" name="home_name" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_mobile">Mobile:</label>
+                                            <input type="text" id="home_mobile" name="home_mobile" class="form-control" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_address">Address:</label>
+                                            <input type="text" id="home_address" name="home_address" class="form-control" >
+                                        </div>
+                                    </div>
+                                
+                                </div>
+
+
+                                <div class="row" id="IdBank" style="display: none;">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="person_name">Name:</label>
+                                            <input type="text" id="person_name" name="person_name" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bank_name">Bank Name:</label>
+                                            <input type="text" id="bank_name" name="bank_name" class="form-control" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="account">Account:</label>
+                                            <input type="text" id="home_address" name="account" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ifse">IFSE:</label>
+                                            <input type="text" id="ifse" name="ifse" class="form-control" >
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="card-header pb-0">
+                                <div class="d-flex align-items-center">
+                                <button class="btn btn-primary btn-sm ms-auto" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+
+
+    <script>
+        /***************************************** Date today *********************************************************/
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Format the date as YYYY-MM-DD
+        var formattedDate = currentDate.toISOString().substr(0, 10);
+
+        // Set the default value of the input field
+        document.getElementById("date").value = formattedDate;
+    </script>
+    
+
+{% endblock %}
