@@ -350,24 +350,34 @@ def order_edit(request, order_id):
     delivery_boys = User.objects.filter(is_delivery_boy=True)
 
     if request.method == 'POST':
-        order.date = request.POST.get('date') 
-        order.customer_name = request.POST.get('customer_name') 
+        order.date = request.POST.get('date')
 
-        order.money_type = request.POST.get('money_type')
+        customer_id = request.POST.get('customer_name') 
+        customer_instance = Customer.objects.get(name=customer_id)
+        order.customer_name = customer_instance
+
+        
 
         order.mrp = request.POST.get('mrp') 
         order.quantity = request.POST.get('quantity') 
         order.total = request.POST.get('total') 
 
-        order.collector_amount = request.POST.get('collector_amount') 
-        order.collector_name = request.POST.get('collector_name') 
+        order.collector_amount = request.POST.get('collector_amount')
+
+       
+        collector_id = request.POST.get('collector_name')
+        collector_instance = User.objects.get(id=collector_id)
+        order.collector_name = collector_instance
+
         order.name = request.POST.get('name') 
         order.mobile = request.POST.get('mobile') 
         order.address = request.POST.get('address')
 
-        order.delivery_type = request.POST.get('delivery_type')
 
-        order.delivery_boy_name = request.POST.get('delivery_boy_name') 
+        delivery_boy_id = request.POST.get('delivery_boy_name')
+        delivery_boy_instance = User.objects.get(id=delivery_boy_id)
+        order.delivery_boy_name = delivery_boy_instance
+    
         order.delivery_boy_amount = request.POST.get('delivery_boy_amount')
 
         order.home_name = request.POST.get('home_name') 
@@ -382,8 +392,8 @@ def order_edit(request, order_id):
             order.save()
             messages.success(request, f"Order updated successfully.")
             return redirect('order_list')
-        except Exception as e:
-            messages.error(request, f"Failed to update order: {e}")
+        except IntegrityError:
+            messages.error(request, f"Order add Failed.")
             return redirect('order_edit', order_id=order_id)
 
     context = {

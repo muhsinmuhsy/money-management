@@ -59,10 +59,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group mt-2">
                                         <label for="customer_name">Customer Name:</label>
-                                        <select id="customer_name" name="customer_name" class="form-control" required >
+                                        <select id="customer_name" name="customer_name" class="form-control" required>
                                             <option value="">Select Customer</option>
                                             {% for customer in customers %}
-                                                <option value="{{ customer.id }}" {% if order.customer_name.id == customer.id %} selected {% endif %} >{{ customer.name }}</option>
+                                                <option value="{{ customer.name }}" {% if order.customer_name.name == customer.name %} selected {% endif %}>{{ customer.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -72,6 +72,8 @@
                                 <div class="col-md-12 mt-3 ">
                                     <h6 class="text-uppercase ">{{ order.money_type }}</h6>
                                 </div>
+
+                                
 
 
                                 <!--- Calculation -->
@@ -198,13 +200,70 @@
                                     <h6>{{ order.delivery_type }}</h6>
                                 </div>
 
-                                
+                                {% if order.delivery_type == 'HOME' %}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_name">Name:</label>
+                                            <input type="text" value="{{ order.home_name }}" id="home_name" name="home_name" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_mobile">Mobile:</label>
+                                            <input type="text" value="{{ order.home_mobile }}"  id="home_mobile" name="home_mobile" class="form-control" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="home_address">Address:</label>
+                                            <input type="text" value="{{ order.home_address }}" id="home_address" name="home_address" class="form-control" >
+                                        </div>
+                                    </div>
+                                {% elif order.delivery_type == 'BANK' %}
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="person_name">Name:</label>
+                                            <input type="text" value="{{ order.person_name }}" id="person_name" name="person_name" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bank_name">Bank Name:</label>
+                                            <input type="text" value="{{ order.bank_name }}" id="bank_name" name="bank_name" class="form-control" >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="account">Account:</label>
+                                            <input type="text" value="{{ order.account }}" id="account" name="account" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ifse">IFSE:</label>
+                                            <input type="text" value="{{ order.ifse }}" id="ifse" name="ifse" class="form-control" >
+                                        </div>
+                                    </div>
+                                {% endif %}
 
                                 
 
+                                
 
 
 
+
+                            </div>
+
+                            <div class="card-header pb-0">
+                                <div class="d-flex align-items-center">
+                                <button class="btn btn-primary btn-sm ms-auto" type="submit">Submit</button>
+                                </div>
                             </div>
     
                         </div>
