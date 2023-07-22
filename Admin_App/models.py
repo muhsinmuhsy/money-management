@@ -58,6 +58,11 @@ class Order(models.Model):
     bank_name = models.CharField(max_length=500, null=True, blank=True)
     account = models.CharField(max_length=500, null=True, blank=True)
     ifse = models.CharField(max_length=500, null=True, blank=True)
+
+    # Delivery boy inputs
+    confirm = models.BooleanField(default=False, null=True, blank=True)
+    cancel = models.BooleanField(default=False, null=True, blank=True) 
+    comment = models.CharField(max_length=500, null=True, blank=True)
     def __str__ (self):
         return self.name
 

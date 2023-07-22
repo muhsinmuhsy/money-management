@@ -386,6 +386,11 @@ def order_edit(request, order_id):
         order.bank_name = request.POST.get('bank_name') 
         order.account = request.POST.get('account') 
         order.ifse = request.POST.get('ifse') 
+
+        # for delivery boys
+        order.confirm = request.POST.get('confirm') 
+        order.cancel = request.POST.get('cancel') 
+        order.comment = request.POST.get('comment') 
         try:
             order.save()
             messages.success(request, f"Order updated successfully.")
@@ -402,7 +407,13 @@ def order_edit(request, order_id):
     }
     return render(request, 'Admin/order_edit.html', context)
 
-    
+@login_required
+def order_view(request, order_id):
+    order = Order.objects.get(id=order_id)
+    context = {
+        'order' : order,
+    }
+    return render(request, 'Admin/order_view.html', context)    
 
 @login_required
 def order_delete(request, order_id):

@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from U_Auth.models import User
 from Admin_App.models import *
+from django.db import IntegrityError
+from django.contrib import messages
 
 # Create your views here.
 
@@ -38,6 +40,16 @@ def collector_order_view(request, order_id):
 @login_required
 def delivery_boy_order_view(request, order_id):
     order = Order.objects.get(id=order_id)
+    if request.method == 'POST':
+        order.confirm = request.POST.get('confirm') 
+        order.cancel = request.POST.get('cancel') 
+        order.comment = request.POST.get('comment')
+        try:
+            order.save()
+            messages.success(request, f"Done")
+            return redirect('dashboard')
+        except IntegrityError:
+            messages.error(request, f"Faield")
     context = {
         'order' : order,
     }

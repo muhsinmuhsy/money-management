@@ -140,7 +140,7 @@
                                                 </td>
                                                   
                                                 <td class="align-middle">
-                                                    <a href="{% url 'collector_order_view' order_id=delivery_boy_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
+                                                    <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
                                                 </td>
                                             </tr>
                                         
@@ -157,9 +157,29 @@
                     </div>
                 </div>
             {% elif request.user.is_delivery_boy %}
+                {% for message in messages %}
+                {% if message.tags == 'error' %}
+                <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                    <span class="text-white">{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+                {% if message.tags == 'success' %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="text-white">{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+            {% endfor %}
+                
                 <div class="row">
                     <div class="col-12">
                     <div class="card mb-4 min-vh-70">
+                        
             
                         <div class="card-header pb-0 d-flex align-items-center">
                         </div>
@@ -178,8 +198,11 @@
                                 </thead>
                             
                                 <tbody>
+
                                     {% if delivery_boy_orders %}
+                                        
                                         {% for delivery_boy_order in delivery_boy_orders %}
+                                            {% if order.confirm == True or order.confirm == None %}
                                             <tr>
                                         
                                                 <td class="align-middle text-center">
@@ -194,11 +217,13 @@
                                                     <a href="{% url 'delivery_boy_order_view' order_id=delivery_boy_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
                                                 </td>                                      
                                             </tr>
+                                            {% endif %}
                                         
                                         {% endfor %}
                                     {% else %}
                                         <p class="text-center">No orders assigned to you yet.</p>
                                     {% endif %}
+
                                 </tbody>
                             
                             </table>

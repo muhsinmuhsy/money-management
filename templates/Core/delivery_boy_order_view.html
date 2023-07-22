@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     {% include 'nav.html' %}
+    
     <div class="container-fluid py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -32,58 +33,170 @@
             <div class="col-12">
                 <div class="card mb-4 min-vh-70">
                     {% if order.delivery_type == 'HOME' %}
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                <div class="container mt-3 mb-5 ">
+                                    <h6>{{ order.money_type }}</h6>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="container ">
+                                    <h6>Home Name</h6>
+                                    <p>{{ order.home_name }}</p>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="container ">
+                                    <h6>Mobile</h6>
+                                    <p>{{ order.home_mobile }}</p>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="container ">
+                                    <h6>Address</h6>
+                                    <p>{{ order.address }}</p>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-4">
+                                <div class="container ">
+                                    <h6>Quantity</h6>
+                                    <p>{{ order.quantity }}</p>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="container ">
+                                    <h6 >Toatal</h6>
+                                    <p>{{ order.total }}</p>
+                                    
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                    {% elif order.delivery_type == 'BANK' %}
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="container mt-3 mb-5 text-center">
+                        <div class="col-md-12 ">
+                            <div class="container mt-3 mb-5 ">
                                 <h6>{{ order.money_type }}</h6>
                                 
                                 
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="container text-center">
-                                <h6>Home Name</h6>
-                                <p>{{ order.home_name }}</p>
+                            <div class="container ">
+                                <h6>Person Name</h6>
+                                <p>{{ order.person_name }}</p>
                                 
                             </div>
                         </div>
 
                         <div class="col-sm-4">
-                            <div class="container text-center">
-                                <h6>Mobile</h6>
-                                <p>{{ order.home_mobile }}</p>
+                            <div class="container ">
+                                <h6>Bank Name</h6>
+                                <p>{{ order.bank_name }}</p>
                                 
                             </div>
                         </div>
 
                         <div class="col-sm-4">
-                            <div class="container text-center">
-                                <h6>Address</h6>
-                                <p>{{ order.address }}</p>
+                            <div class="container ">
+                                <h6>Account</h6>
+                                <p>{{ order.account }}</p>
                                 
                             </div>
                         </div>
 
+                        <div class="col-sm-4">
+                            <div class="container ">
+                                <h6>IFSE</h6>
+                                <p>{{ order.ifse }}</p>
+                                
+                            </div>
+                        </div>
 
                         <div class="col-sm-4">
-                            <div class="container text-center">
+                            <div class="container ">
                                 <h6>Quantity</h6>
                                 <p>{{ order.quantity }}</p>
                                 
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="container text-center">
+                            <div class="container ">
                                 <h6 >Toatal</h6>
                                 <p>{{ order.total }}</p>
                                 
                             </div>
                         </div>
+                        
+
                     </div>
                     {% endif %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    
+                                        
+                    
+                                    <div class="form-group">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col-sm-2">
+                                                <button type="submit" name="confirm" value="True" class="btn btn-success">Confirm</button>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn bg-danger text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    Cancel
+                                                </button>
+                                    
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Type Somthing..</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <input type="text" class="form-control" name="comment">
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <div class="d-flex justify-content-between w-100">
+                                                                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" name="cancel" value="True" class="btn bg-gradient-danger">Cancel</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    
                 </div>
             </div>
         </div>
     
     </div>
 {% endblock %}
+
+
