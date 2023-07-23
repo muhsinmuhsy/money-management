@@ -366,7 +366,6 @@ def order_edit(request, order_id):
 
         order.collector_amount = request.POST.get('collector_amount')
 
-       
         collector_id = request.POST.get('collector_name')
         collector_instance = User.objects.get(id=collector_id)
         order.collector_name = collector_instance

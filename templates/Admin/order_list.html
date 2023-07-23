@@ -89,9 +89,20 @@
                         <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name }}</span>
                       </td>
                       <td class="align-middle text-center">
+                        {% if order.confirm_cancel_pending == 'PENDING' %}
+                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
+                        {% endif %} 
+                        {% if order.confirm_cancel_pending == 'CANCEL' %}
+                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: red;"></i></a>
+                        {% endif %} 
+                        {% if order.confirm_cancel_pending == 'CONFIRM' %}
+                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
+                        {% endif %} 
                         <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name }}</span>
+                        
                       </td>
                       <td class="align-middle">
+                        
                         <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
                         <a href="{% url 'order_edit' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fas fa-pencil-alt text-dark me-2" ></i></a>
                         <a href="{% url 'order_delete' order.id %} " onclick="return confirm('Are you sure you want to delete this?')" class="text-danger font-weight-bold text-xs"><i class="far fa-trash-alt me-2"></i></a>

@@ -43,6 +43,10 @@ class Order(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
     mobile = models.CharField(max_length=500, null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
+    # Collected
+    money_collected = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    money_pending = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    
 
     delivery_type = models.CharField(max_length=500, choices=DELIVERY_TYPE, null=True, blank=True)
     delivery_boy_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -64,7 +68,7 @@ class Order(models.Model):
     account = models.CharField(max_length=500, null=True, blank=True)
     ifse = models.CharField(max_length=500, null=True, blank=True)
 
-    # Delivery boy inputs
+    # Delivery boy status
     confirm_cancel_pending = models.CharField(max_length=500, choices=CONFIRM_CANCEL_PENDING, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True, blank=True)
     def __str__ (self):

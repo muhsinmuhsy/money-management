@@ -112,18 +112,107 @@
                             </div>
                         {% endif %}
                         
-                    </div>
-                    
+                        <hr class="horizontal dark">
 
-                    
-                    
-                    
-                    
-                </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Total</h6>
+                                <p>{{ order.collector_amount }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Collected</h6>
+                                <p>{{ order.money_collected }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Pending</h6>
+                                <p>{{ order.money_pending }}</p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4 ">
+                            <div class="container">
+                            <!-- Button trigger modal -->
+                                <button type="button" class="btn bg-gradient-info btn-block " data-bs-toggle="modal" data-bs-target="#exampleModalSignUp">
+                                    Add Collected
+                                </button>
+                            </div>
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalSignUp" tabindex="-1" role="dialog" aria-labelledby="exampleModalSignTitle" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-body p-0">
+                                    <div class="card card-plain">
+                                      <!-- <div class="card-header pb-0 text-left">
+                                          <h3 class="font-weight-bolder text-primary text-gradient">Join us today</h3>
+                                          <p class="mb-0">Enter your email and password to register</p>
+                                      </div> -->
+                                      <div class="card-body pb-3">
+                                        <form role="form text-left" method="post" action="{% url 'collector_order_view' order_id=order.id %}">
+                                            {% csrf_token %}
+                                            <label>Total</label>
+                                            <div class="input-group mb-3">
+                                                <input type="number" name="collector_amount" class="form-control" readonly value="{{ order.collector_amount }}" aria-label="Name" aria-describedby="name-addon">
+                                            </div>
+                                            <label>Pending</label>
+                                            <div class="input-group mb-3">
+                                                <input type="number" name="money_collected" class="form-control" readonly value="{{ order.money_pending }}" aria-label="Email" aria-describedby="email-addon" id="money_collected">
+                                            </div>
+                                            <label>Collected</label>
+                                            <div class="input-group mb-3">
+                                                <input type="number" required name="money_pending" class="form-control" value="{{ order.money_collected }}" aria-label="Password" aria-describedby="password-addon" id="money_pending">
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">Submit</button>
+                                            </div>
+                                        </form>
+                                      </div>
+                                      <!-- <div class="card-footer text-center pt-0 px-sm-4 px-1">
+                                        <p class="mb-4 mx-auto">
+                                          Already have an account?
+                                          <a href="javascrpt:;" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                                        </p>
+                                      </div> -->
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>                       
+                    </div>
+               </div>
             </div>
         </div>
     
     </div>
+
+    <script>
+        // Function to automatically calculate the pending amount when collected amount changes
+        function calculatePendingAmount() {
+            var totalAmount = parseFloat("{{ order.collector_amount }}");
+            var collectedAmount = parseFloat(document.getElementById("money_pending").value);
+            var pendingAmount = totalAmount - collectedAmount;
+            if (pendingAmount < 0) {
+                pendingAmount = 0; // Avoid negative pending amount
+            }
+            document.getElementById("money_collected").value = pendingAmount;
+        }
+    
+        // Attach event listener to "Collected" input field
+        document.getElementById("money_pending").addEventListener("input", calculatePendingAmount);
+    
+        // Perform initial calculation on page load
+        calculatePendingAmount();
+    </script>
 {% endblock %}
 
 

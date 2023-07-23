@@ -31,6 +31,16 @@ def dashboard(request):
 @login_required
 def collector_order_view(request, order_id):
     order = Order.objects.get(id=order_id)
+    if request.method == 'POST':
+        order.collector_amount = request.POST.get('collector_amount')
+        order.money_collected = request.POST.get('money_collected')
+        order.money_pending = request.POST.get('money_pending')
+        try:
+            order.save()
+            messages.success(request, f"Done")
+            return redirect('collector_order_view', order_id=order.id)
+        except IntegrityError:
+            messages.error(request, f"Faield")
     context = {
         'order' : order,
     }
