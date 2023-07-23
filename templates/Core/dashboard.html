@@ -138,8 +138,11 @@
                                                 <td class="align-middle text-center">
                                                     <span class="text-secondary text-xs font-weight-bold">{{ collector_order.money_type }} - {{ collector_order.collector_amount }}</span>
                                                 </td>
-                                                  
+                                                
                                                 <td class="align-middle">
+                                                    {% if collector_order.confirm_cancel_pending == 'PENDING' %}
+                                                     <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
+                                                    {% endif %} 
                                                     <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
                                                 </td>
                                             </tr>
@@ -158,23 +161,23 @@
                 </div>
             {% elif request.user.is_delivery_boy %}
                 {% for message in messages %}
-                {% if message.tags == 'error' %}
-                <div class="alert alert-danger alert-dismissible fade show " role="alert">
-                    <span class="text-white">{{ message }}</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {% endif %}
-                {% if message.tags == 'success' %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="text-white">{{ message }}</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {% endif %}
-            {% endfor %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                        <span class="text-white">{{ message }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if message.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span class="text-white">{{ message }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
                 
                 <div class="row">
                     <div class="col-12">

@@ -220,6 +220,21 @@
                                 
                             </div>
                         </div>
+
+                        <div class="col-md-12 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Status</h6>
+                                <p>{{ order.confirm_cancel_pending}}</p>
+                            </div>
+                        </div>
+                        {% if order.comment != '' %}
+                            <div class="col-md-12 ">
+                                <div class="container mt-3 mb-5 ">
+                                    <h6>Cancel Review</h6>
+                                    <p>{{ order.comment}}</p>
+                                </div>
+                            </div>
+                        {% endif %}
                         
 
                     </div>
