@@ -86,8 +86,9 @@
                         <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
                       </td>
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name }}</span>
-                      </td>
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</span>
+                    </td>
+                    
                       <td class="align-middle text-center">
                         {% if order.confirm_cancel_pending == 'PENDING' %}
                           <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
@@ -98,7 +99,7 @@
                         {% if order.confirm_cancel_pending == 'CONFIRM' %}
                           <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
                         {% endif %} 
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name }}</span>
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
                         
                       </td>
                       <td class="align-middle">

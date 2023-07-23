@@ -6,7 +6,7 @@
     <div class="container-fluid py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Order List</a></li>
             <li class="breadcrumb-item"><a href="javascript:;">Order Details</a></li>
             </ol>
         </nav>
@@ -31,7 +31,7 @@
         
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4 min-vh-70">
+                <div class="card mb-4 ">
                     <div class="row">
                         
                         <div class="col-md-4 ">
@@ -93,7 +93,7 @@
                         <div class="col-md-2 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Delivery Agent</h6>
-                                <p>{{ order.delivery_boy_name }}</p>
+                                <p>{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }}</p>
                             </div>
                         </div>
 
@@ -164,11 +164,11 @@
                                             </div>
                                             <label>Pending</label>
                                             <div class="input-group mb-3">
-                                                <input type="number" name="money_collected" class="form-control" readonly value="{{ order.money_pending }}" aria-label="Email" aria-describedby="email-addon" id="money_collected">
+                                                <input type="number" name="money_pending" class="form-control" readonly value="{{ order.money_pending }}" aria-label="Email" aria-describedby="email-addon" id="money_collected">
                                             </div>
                                             <label>Collected</label>
                                             <div class="input-group mb-3">
-                                                <input type="number" required name="money_pending" class="form-control" value="{{ order.money_collected }}" aria-label="Password" aria-describedby="password-addon" id="money_pending">
+                                                <input type="number" required name="money_collected" class="form-control" value="{{ order.money_collected }}" aria-label="Password" aria-describedby="password-addon" id="money_pending">
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">Submit</button>

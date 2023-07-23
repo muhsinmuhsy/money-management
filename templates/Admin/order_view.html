@@ -31,7 +31,7 @@
         
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4 min-vh-70">
+                <div class="card mb-4 ">
                     <div class="row">
                         
                         <div class="col-md-4 ">
@@ -58,7 +58,7 @@
                         
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
-                                <h6>amount</h6>
+                                <h6>Amount</h6>
                                 <p>{{ order.mrp }}</p>
                             </div>
                         </div>
@@ -74,11 +74,16 @@
                                 <p>{{ order.total }}</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mb-4 ">
+                    <div class="row">
+
                         <hr class="horizontal dark">
                         <div class="col-md-12 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Collection Agent</h6>
-                                <p>{{ order.collector_name }}</p>
+                                <p>{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</p>
                             </div>
                         </div>
                         <div class="col-md-4 ">
@@ -99,11 +104,35 @@
                                 <p>{{ order.address }}</p>
                             </div>
                         </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Total</h6>
+                                <p>{{ order.collector_amount }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Collected</h6>
+                                <p>{{ order.money_collected }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Pending</h6>
+                                <p>{{ order.money_pending }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 ">
+                    <div class="row">
                         <hr class="horizontal dark">
                         <div class="col-md-2 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Delivery Agent</h6>
-                                <p>{{ order.delivery_boy_name }}</p>
+                                <p>{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }}</p>
                             </div>
                         </div>
                         
@@ -139,7 +168,7 @@
                             </div>
 
 
-                            <div class="col-sm-4">
+                            <!-- <div class="col-sm-4">
                                 <div class="container ">
                                     <h6>Quantity</h6>
                                     <p>{{ order.quantity }}</p>
@@ -152,7 +181,7 @@
                                     <p>{{ order.total }}</p>
                                     
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-12 ">
                                 <div class="container mt-3 mb-5 ">
@@ -208,7 +237,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
+                        <!-- <div class="col-sm-4">
                             <div class="container ">
                                 <h6>Quantity</h6>
                                 <p>{{ order.quantity }}</p>
@@ -221,7 +250,7 @@
                                 <p>{{ order.total }}</p>
                                 
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-12 ">
                             <div class="container mt-3 mb-5 ">
