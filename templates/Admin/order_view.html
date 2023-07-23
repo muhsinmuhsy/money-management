@@ -6,7 +6,7 @@
     <div class="container-fluid py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
             <li class="breadcrumb-item"><a href="javascript:;">Order Details</a></li>
             </ol>
         </nav>
@@ -32,14 +32,87 @@
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4 min-vh-70">
+                    <div class="row">
+                        
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Date</h6>
+                                <p>{{ order.date }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Customer</h6>
+                                <p>{{ order.customer_name }}</p>
+                            </div>
+                        </div>
+
+                        <hr class="horizontal dark">
+
+                        <div class="col-md-12 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>{{ order.money_type }}</h6>
+                                     
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>amount</h6>
+                                <p>{{ order.mrp }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Quantit</h6>
+                                <p>{{ order.quantity }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Total</h6>
+                                <p>{{ order.total }}</p>
+                            </div>
+                        </div>
+                        <hr class="horizontal dark">
+                        <div class="col-md-12 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Collection Agent</h6>
+                                <p>{{ order.collector_name }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Customer Name</h6>
+                                <p>{{ order.name }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Customer Moble</h6>
+                                <p>{{ order.mobile }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Customer Address</h6>
+                                <p>{{ order.address }}</p>
+                            </div>
+                        </div>
+                        <hr class="horizontal dark">
+                        <div class="col-md-2 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Delivery Agent</h6>
+                                <p>{{ order.delivery_boy_name }}</p>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
                     {% if order.delivery_type == 'HOME' %}
                         <div class="row">
                             <div class="col-md-12 ">
-                                <div class="container mt-3 mb-5 ">
-                                    <h6>{{ order.money_type }}</h6>
-                                    
-                                    
-                                </div>
+                                
                             </div>
                             <div class="col-sm-4">
                                 <div class="container ">
@@ -80,17 +153,26 @@
                                     
                                 </div>
                             </div>
+
+                            <div class="col-md-12 ">
+                                <div class="container mt-3 mb-5 ">
+                                    <h6>Status</h6>
+                                    <p>{{ order.confirm_cancel_pending}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="container mt-3 mb-5 ">
+                                    <h6>Cancel Review</h6>
+                                    <p>{{ order.comment}}</p>
+                                </div>
+                            </div>
                             
 
                         </div>
                     {% elif order.delivery_type == 'BANK' %}
                     <div class="row">
                         <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>{{ order.money_type }}</h6>
-                                
-                                
-                            </div>
+                           
                         </div>
                         <div class="col-sm-4">
                             <div class="container ">
@@ -142,54 +224,7 @@
 
                     </div>
                     {% endif %}
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <div class="container mt-5">
-                            <div class="row">
-                                <div class="col-12">
-                                    
-                                        
                     
-                                    <div class="form-group">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="col-sm-2">
-                                                <button type="submit" name="confirm_cancel_pending" value="CONFIRM"  class="btn btn-success">Confirm</button>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <!-- Button trigger modal -->
-                                                <button type="button" class="btn bg-danger text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    Cancel
-                                                </button>
-                                    
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Type Somthing..</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <input type="text" class="form-control" name="comment">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <div class="d-flex justify-content-between w-100">
-                                                                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit"  name="confirm_cancel_pending" value="CANCEL"  class="btn bg-gradient-danger">Cancel</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                     
                     
                 </div>

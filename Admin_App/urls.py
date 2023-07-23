@@ -28,6 +28,7 @@ urlpatterns = [
     path('order_add/', order_add, name='order_add'),
     path('order_edit/<int:order_id>/', order_edit, name='order_edit'),
     path('order_delete/<int:order_id>/', order_delete, name='order_delete'),
+    path('order_view/<int:order_id>/', order_view, name='order_view'),
     # for automatic field add
     path('get_customer_details/', get_customer_details, name='get_customer_details'),
 ]

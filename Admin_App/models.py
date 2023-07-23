@@ -21,6 +21,11 @@ class Order(models.Model):
         ('BANK' , 'BANK'),
         
     )
+    CONFIRM_CANCEL_PENDING = (
+        ('CONFIRM', 'CONFIRM'),
+        ('CANCEL', 'CANCEL'),
+        ('PENDING', 'PENDING')
+    )
     date = models.DateField(null=True, blank=True)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     money_type = models.CharField(max_length=500, choices=MONEY_TYPE, null=True, blank=True)
@@ -60,8 +65,7 @@ class Order(models.Model):
     ifse = models.CharField(max_length=500, null=True, blank=True)
 
     # Delivery boy inputs
-    confirm = models.BooleanField(default=False, null=True, blank=True)
-    cancel = models.BooleanField(default=False, null=True, blank=True) 
+    confirm_cancel_pending = models.CharField(max_length=500, choices=CONFIRM_CANCEL_PENDING, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True, blank=True)
     def __str__ (self):
         return self.name

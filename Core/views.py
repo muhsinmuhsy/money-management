@@ -41,8 +41,7 @@ def collector_order_view(request, order_id):
 def delivery_boy_order_view(request, order_id):
     order = Order.objects.get(id=order_id)
     if request.method == 'POST':
-        order.confirm = request.POST.get('confirm') 
-        order.cancel = request.POST.get('cancel') 
+        order.confirm_cancel_pending = request.POST.get('confirm_cancel_pending') 
         order.comment = request.POST.get('comment')
         try:
             order.save()

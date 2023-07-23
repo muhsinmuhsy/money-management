@@ -223,7 +223,7 @@ def customer_delete(request, customer_id):
             messages.error(request, f"The username '{customer.name}' Delete Failed.")
             return redirect('customer_list')
     
-# ---------------------------------------------- Order (Home,Bank) -------------------------------------------------------- #
+# ---------------------------------------------- Order -------------------------------------------------------- #
 
 @login_required
 def order_list(request):
@@ -268,6 +268,7 @@ def order_add(request):
         bank_name = request.POST.get('bank_name') 
         account = request.POST.get('account') 
         ifse = request.POST.get('ifse') 
+        
 
         customer = Customer.objects.get(id=customer_id)
         collector = User.objects.filter(id=collector_id).first()
@@ -301,6 +302,9 @@ def order_add(request):
                 bank_name=bank_name,
                 account=account,
                 ifse=ifse,
+                confirm_cancel_pending='PENDING',
+                comment = ''
+
             )
             messages.success(request, f"Order added successfully.")
             return redirect('order_list')
@@ -388,9 +392,8 @@ def order_edit(request, order_id):
         order.ifse = request.POST.get('ifse') 
 
         # for delivery boys
-        order.confirm = request.POST.get('confirm') 
-        order.cancel = request.POST.get('cancel') 
-        order.comment = request.POST.get('comment') 
+        order.confirm_cancel_pending = 'PENDING'
+        order.comment = ''
         try:
             order.save()
             messages.success(request, f"Order updated successfully.")
@@ -432,3 +435,9 @@ def order_delete(request, order_id):
             return redirect('order_list')
     
 
+def order_view(request, order_id):
+    order = Order.objects.get(id=order_id)
+    context = {
+        'order' : order,
+    }
+    return render(request, 'Admin/order_view.html', context)
