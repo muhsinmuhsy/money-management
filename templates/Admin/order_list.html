@@ -52,7 +52,7 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Boy Name</th>
-                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Status</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -90,7 +90,11 @@
                     </td>
                     
                       <td class="align-middle text-center">
-                        {% if order.confirm_cancel_pending == 'PENDING' %}
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.wholesaler_name.name }}</span>   
+                      </td>
+                      <td class="align-middle text-center">
+                        <!-- {% if order.confirm_cancel_pending == 'PENDING' %}
                           <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
                         {% endif %} 
                         {% if order.confirm_cancel_pending == 'CANCEL' %}
@@ -98,9 +102,24 @@
                         {% endif %} 
                         {% if order.confirm_cancel_pending == 'CONFIRM' %}
                           <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
-                        {% endif %} 
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
-                        
+                        {% endif %}  -->
+                        {% if order.delivery_boy_name %}
+                          {% if order.confirm_cancel_pending == 'PENDING' %}
+                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
+                          {% endif %} 
+                          {% if order.confirm_cancel_pending == 'CANCEL' %}
+                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
+                          {% endif %} 
+                          {% if order.confirm_cancel_pending == 'CONFIRM' %}
+                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                          {% endif %}
+                          {% if order.confirm_cancel_pending == 'COMPLEATED' %}
+                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
+                          {% endif %}
+                        {% elif order.wholesaler_name %}
+                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-arrows-h me-2" style="color: black;"></i></a>
+                        {% endif %}
+
                       </td>
                       <td class="align-middle">
                         

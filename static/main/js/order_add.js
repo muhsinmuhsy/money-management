@@ -15,6 +15,11 @@ $(document).ready(function() {
     $("#delivery_boy_name").select2();
 });
 
+$(document).ready(function() {
+    // Target the select element and apply Select2
+    $("#wholesaler_name").select2();
+});
+
 
 /***************************************** Calculation Automatixc Amount field add *********************************************************/
 

@@ -10,6 +10,13 @@ class Customer(models.Model):
     def __str__ (self):
         return self.name
 
+class Wholesaler(models.Model):
+    name = models.CharField(max_length=500)
+    mobile = models.CharField(max_length=500)
+    address = models.CharField(max_length=500)
+    def __str__ (self):
+        return self.name
+
 
 class Order(models.Model):
     MONEY_TYPE = (
@@ -24,7 +31,8 @@ class Order(models.Model):
     CONFIRM_CANCEL_PENDING = (
         ('CONFIRM', 'CONFIRM'),
         ('CANCEL', 'CANCEL'),
-        ('PENDING', 'PENDING')
+        ('PENDING', 'PENDING'),
+        ('COMPLEATED', 'COMPLEATED')
     )
     date = models.DateField(null=True, blank=True)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
@@ -51,13 +59,17 @@ class Order(models.Model):
     delivery_type = models.CharField(max_length=500, choices=DELIVERY_TYPE, null=True, blank=True)
     delivery_boy_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    # HOME
     delivery_boy_name = models.ForeignKey(
         User,
         limit_choices_to={'is_delivery_boy': True},
         related_name='delivery_boy_orders',
         on_delete=models.CASCADE, null=True, blank=True
     )
+
+    # HOME
+    
+    wholesaler_name = models.ForeignKey(Wholesaler, on_delete=models.CASCADE, null=True, blank=True)
+
     home_name = models.CharField(max_length=500, null=True, blank=True)
     home_mobile = models.CharField(max_length=500, null=True, blank=True)
     home_address = models.CharField(max_length=500, null=True, blank=True)

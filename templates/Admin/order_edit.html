@@ -178,7 +178,7 @@
                                 <div class="col-md-6" style="padding-top: 7px;">
                                     <div class="form-group" >
                                         <label for="delivery_boy_name">Delivery agent:</label>
-                                        <select id="delivery_boy_name" name="delivery_boy_name" class="form-control" required >
+                                        <select id="delivery_boy_name" name="delivery_boy_name" class="form-control">
                                             <option value="">Select Delivery Agent</option>
                                             {% for delivery_boy in delivery_boys %}
                                                 <option value="{{ delivery_boy.id }}" {% if order.delivery_boy_name.id == delivery_boy.id %} selected {% endif %}>{{ delivery_boy.username }}</option>
@@ -191,6 +191,18 @@
                                     <div class="form-group " >
                                         <label for="example-text-input" class="form-control-label">Amount</label>
                                         <input class="form-control" type="number" value="{{ order.delivery_boy_amount }}" name="delivery_boy_amount" id="delivery_boy_amount"  readonly >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mt-2">
+                                        <label for="wholesaler_name">wholesaler Name:</label>
+                                        <select id="wholesaler_name" name="wholesaler_name" class="form-control" >
+                                            <option value="">Select wholesaler</option>
+                                            {% for wholesaler in wholesalers %}
+                                                <option value="{{ wholesaler.name }}" {% if order.wholesaler_name.name == wholesaler.name %} selected {% endif %}>{{ wholesaler.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
 

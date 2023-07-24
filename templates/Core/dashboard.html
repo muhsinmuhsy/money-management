@@ -140,15 +140,18 @@
                                                 </td>
                                                 
                                                 <td class="align-middle">
-                                                    {% if collector_order.confirm_cancel_pending == 'PENDING' %}
-                                                     <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
+                                                    {% if order.confirm_cancel_pending == 'PENDING' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
                                                     {% endif %} 
-                                                    {% if collector_order.confirm_cancel_pending == 'CANCEL' %}
-                                                     <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: red;"></i></a>
+                                                    {% if order.confirm_cancel_pending == 'CANCEL' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
                                                     {% endif %} 
-                                                    {% if collector_order.confirm_cancel_pending == 'CONFIRM' %}
-                                                     <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
-                                                    {% endif %} 
+                                                    {% if order.confirm_cancel_pending == 'CONFIRM' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                                                    {% endif %}
+                                                    {% if order.confirm_cancel_pending == 'COMPLEATED' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
+                                                    {% endif %}
                                                     <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
                                                 </td>
                                             </tr>
@@ -211,7 +214,7 @@
                                     {% if delivery_boy_orders %}
                                         
                                         {% for delivery_boy_order in delivery_boy_orders %}
-                                        {% if delivery_boy_order.confirm_cancel_pending == 'CONFIRM' or delivery_boy_order.confirm_cancel_pending == 'PENDING' %}
+                                        {% if delivery_boy_order.confirm_cancel_pending == 'CONFIRM' or delivery_boy_order.confirm_cancel_pending == 'PENDING' or delivery_boy_order.confirm_cancel_pending == 'COMPLEATED' %}
                                             <tr>
                                         
                                                 <td class="align-middle text-center">
@@ -225,6 +228,12 @@
                                                 <td class="align-middle">
                                                     {% if delivery_boy_order.confirm_cancel_pending == 'PENDING' %}
                                                     <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
+                                                    {% endif %}
+                                                    {% if delivery_boy_order.confirm_cancel_pending == 'CONFIRM' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
+                                                    {% endif %}
+                                                    {% if delivery_boy_order.confirm_cancel_pending == 'COMPLEATED' %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: #fff;"></i> </a>
                                                     {% endif %}
                                                     
                                                     <a href="{% url 'delivery_boy_order_view' order_id=delivery_boy_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  

@@ -223,6 +223,76 @@ def customer_delete(request, customer_id):
             messages.error(request, f"The username '{customer.name}' Delete Failed.")
             return redirect('customer_list')
     
+
+# ---------------------------------------------- Wholesaler -------------------------------------------------------- #
+
+@login_required
+def wholesaler_list(request):
+    wholesaler = Wholesaler.objects.all()
+    context = {
+        'wholesaler' : wholesaler,
+    }
+    return render(request, 'Admin/wholesaler_list.html', context)
+
+
+@login_required
+def wholesaler_add(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        mobile = request.POST.get('mobile')
+        address = request.POST.get('address')
+        try:
+            wholesaler = Wholesaler(
+                name=name,
+                mobile=mobile,
+                address=address,
+            )
+            wholesaler.save()
+            messages.success(request, f"The '{wholesaler.name}' add success fully")
+            return redirect('wholesaler_list')
+        except IntegrityError:
+            messages.error(request, f"wholesaleradd field")
+            return redirect('wholesaler_add')
+    return render(request, 'Admin/wholesaler_add.html')
+
+
+@login_required
+def wholesaler_edit(request, wholesaler_id):
+    try:
+        wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    except wholesaler.DoesNotExist:
+        messages.error(request, f"wholesaler with ID {wholesaler_id} does not exist.")
+        return redirect('wholesaler_list')
+    if request.method == 'POST':
+        wholesaler.name = request.POST.get('name')
+        wholesaler.mobile = request.POST.get('mobile')
+        wholesaler.address = request.POST.get('address')
+        try:
+            wholesaler.save()
+            messages.success(request, f"Delivery Boy '{wholesaler.name}' updated successfully.")
+            return redirect('wholesaler_list')
+        except IntegrityError:
+            messages.error(request, f"The username '{wholesaler.name}' is already taken. Please choose a different username.")
+            return redirect('wholesaler_edit', wholesaler_id=wholesaler_id)            
+    return render(request, 'Admin/wholesaler_edit.html', {'wholesaler': wholesaler})
+
+
+@login_required
+def wholesaler_delete(request, wholesaler_id):
+    try:
+        wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    except wholesaler.DoesNotExist:
+        messages.error(request, f"wholesaler with ID {wholesaler_id} does not exist.")
+        return redirect('wholesaler_list')
+    
+    try:
+        wholesaler.delete()
+        messages.success(request, f"wholesaler '{wholesaler.name}' Delete successfully.")
+        return redirect('wholesaler_list')
+    except IntegrityError:
+            messages.error(request, f"The username '{wholesaler.name}' Delete Failed.")
+
+
 # ---------------------------------------------- Order -------------------------------------------------------- #
 
 @login_required
@@ -237,6 +307,7 @@ def order_list(request):
 @login_required
 def order_add(request):
     customers = Customer.objects.all()
+    wholesalers = Wholesaler.objects.all()
     collectors = User.objects.filter(is_collector=True)
     delivery_boys = User.objects.filter(is_delivery_boy=True)
     if request.method == 'POST':
@@ -257,6 +328,8 @@ def order_add(request):
 
         delivery_type = request.POST.get('delivery_type')
 
+        wholesaler_id = request.POST.get('wholesaler_name') 
+
         delivery_boy_id = request.POST.get('delivery_boy_name') 
         delivery_boy_amount = request.POST.get('delivery_boy_amount')
 
@@ -271,8 +344,17 @@ def order_add(request):
         
 
         customer = Customer.objects.get(id=customer_id)
+
+        if wholesaler_id:
+            wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+        else:
+            wholesaler = None
+
         collector = User.objects.filter(id=collector_id).first()
-        delivery_boy = User.objects.filter(id=delivery_boy_id).first()
+        if delivery_boy_id:
+            delivery_boy = User.objects.filter(id=delivery_boy_id).first()
+        else:
+            delivery_boy = None
         try:
             order = Order.objects.create(
                 date=date,
@@ -290,6 +372,8 @@ def order_add(request):
                 address=address,
 
                 delivery_type=delivery_type,
+
+                wholesaler_name=wholesaler,
 
                 delivery_boy_name=delivery_boy,
                 delivery_boy_amount=delivery_boy_amount,
@@ -314,6 +398,7 @@ def order_add(request):
         
     context = {
         'customers': customers,
+        'wholesalers': wholesalers,
         'collectors': collectors,
         'delivery_boys': delivery_boys,
     }
@@ -348,6 +433,7 @@ def order_edit(request, order_id):
         return redirect('order_list')
 
     customers = Customer.objects.all()
+    wholesalers = Wholesaler.objects.all()
     collectors = User.objects.filter(is_collector=True)
     delivery_boys = User.objects.filter(is_delivery_boy=True)
 
@@ -376,8 +462,18 @@ def order_edit(request, order_id):
 
 
         delivery_boy_id = request.POST.get('delivery_boy_name')
-        delivery_boy_instance = User.objects.get(id=delivery_boy_id)
-        order.delivery_boy_name = delivery_boy_instance
+        if delivery_boy_id:
+            delivery_boy_instance = User.objects.get(id=delivery_boy_id)
+            order.delivery_boy_name = delivery_boy_instance
+        else:
+            order.delivery_boy_name = None
+
+        wholesaler_id = request.POST.get('wholesaler_name')
+        if wholesaler_id:
+            wholesaler_instance = Wholesaler.objects.get(name=wholesaler_id)
+            order.wholesaler_name = wholesaler_instance
+        else:
+            order.wholesaler_name = None  # Corrected line
     
         order.delivery_boy_amount = request.POST.get('delivery_boy_amount')
 
@@ -404,6 +500,7 @@ def order_edit(request, order_id):
     context = {
         'order': order,
         'customers': customers,
+        'wholesalers': wholesalers,
         'collectors': collectors,
         'delivery_boys': delivery_boys,
     }
@@ -440,3 +537,6 @@ def order_view(request, order_id):
         'order' : order,
     }
     return render(request, 'Admin/order_view.html', context)
+
+
+

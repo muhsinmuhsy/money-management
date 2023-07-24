@@ -20,7 +20,14 @@ urlpatterns = [
     path('customer_list/', customer_list, name='customer_list'),
     path('customer_add/', customer_add, name='customer_add'),
     path('customer_edit/<int:customer_id>/', customer_edit, name='customer_edit'),
-    path('customer_delete/<int:customer_id>/', customer_delete, name='customer_delete'),
+    path('customer_delete/<int:customer_id>/', customer_delete, name='customer_delete'),\
+    
+    # ---------------------------------------------- Wholesaler -------------------------------------------------------- #
+
+    path('wholesaler_list/', wholesaler_list, name='wholesaler_list'),
+    path('wholesaler_add/', wholesaler_add, name='wholesaler_add'),
+    path('wholesaler_edit/<int:wholesaler_id>/', wholesaler_edit, name='wholesaler_edit'),
+    path('wholesaler_delete/<int:wholesaler_id>/', wholesaler_delete, name='wholesaler_delete'),
 
     # ---------------------------------------------- Order -------------------------------------------------------- #
 

@@ -207,7 +207,7 @@
                                 <div class="col-md-6" style="padding-top: 7px;">
                                     <div class="form-group">
                                         <label for="delivery_boy_name">Delivery agent:</label>
-                                        <select id="delivery_boy_name" name="delivery_boy_name" class="form-control" required>
+                                        <select id="delivery_boy_name" name="delivery_boy_name" class="form-control" >
                                             <option value="">Select Delivery Agent</option>
                                             {% for delivery_boy in delivery_boys %}
                                                 <option value="{{ delivery_boy.id }}">{{ delivery_boy.first_name }} {{ delivery_boy.last_name }}</option>
@@ -227,6 +227,19 @@
                                 <!------------------------------------------------------------>
 
                                 <div class="row" id="IdHome" style="display: none;">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group mt-2">
+                                            <label for="wholesaler_name">wholesaler Name:</label>
+                                            <br>
+                                            <select id="wholesaler_name" name="wholesaler_name" class="form-control" >
+                                                <option value="">Select wholesaler</option>
+                                                {% for wholesaler in wholesalers %}
+                                                    <option value="{{ wholesaler.id }}">{{ wholesaler.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
