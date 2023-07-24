@@ -124,14 +124,22 @@
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Collected</h6>
-                                <p>{{ order.money_collected }}</p>
+                                {% if order.money_collected %}
+                                    <p>{{ order.money_collected }}</p>
+                                {% else %}
+                                    <p>0</p>
+                                {% endif %}
                             </div>
                         </div>
                         
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Pending</h6>
-                                <p>{{ order.money_pending }}</p>
+                                {% if order.money_pending %}
+                                    <p>{{ order.money_pending }} </p>
+                                {% else %}
+                                    <p>{{ order.collector_amount }} </p>
+                                {% endif %}
                             </div>
                         </div>
 

@@ -6,6 +6,7 @@ urlpatterns = [
     path('collector_list/', collector_list, name='collector_list'),
     path('collector_add/', collector_add, name='collector_add'),
     path('collector_edit/<int:collector_id>/', collector_edit, name='collector_edit'),
+    path('collector_view/<int:collector_id>/', collector_view, name='collector_view'),
     path('collector_delete/<int:collector_id>/', collector_delete, name='collector_delete'),
 
     # ---------------------------------------------- Delivry Boy -------------------------------------------------------- #

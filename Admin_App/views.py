@@ -68,6 +68,17 @@ def collector_edit(request, collector_id):
             return redirect('collector_edit', collector_id=collector_id)           
     return render(request, 'Admin/collector_edit.html', {'collector': collector})
 
+
+def collector_view(request, collector_id):
+    collector = User.objects.get(id=collector_id, is_collector=True)
+    orders = Order.objects.filter(collector_name=collector)
+    context = {
+        'collector': collector,
+        'orders': orders,
+    }
+    return render(request, 'Admin/collector_view.html', context)
+
+
 @login_required
 def collector_delete(request, collector_id):
     collector = User.objects.get(id=collector_id, is_collector=True)
@@ -139,6 +150,17 @@ def delivery_boy_edit(request, delivery_boy_id):
             messages.error(request, f"The username '{delivery_boy.username}' is already taken. Please choose a different username.")
             return redirect('delivery_boy_edit', delivery_boy_id=delivery_boy_id)            
     return render(request, 'Admin/delivery_boy_edit.html', {'delivery_boy': delivery_boy})
+
+
+def delivery_boy_view(request, delivery_boy_id):
+    delivery_boy = User.objects.get(id=delivery_boy_id, is_delivery_boy=True)
+    orders = Order.objects.filter(delivery_boy_name=delivery_boy)
+    context = {
+        'delivery_boy': delivery_boy,
+        'orders': orders,
+    }
+    return render(request, 'Admin/delivery_boy_view.html', context)
+
 
 @login_required
 def delivery_boy_delete(request, delivery_boy_id):
