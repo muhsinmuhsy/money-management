@@ -6,99 +6,196 @@
         <div class="container-fluid py-4">
             {% if request.user.is_superuser %}    
                 <div class="row">
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Order</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ order_count }}
-                                </h5>
-                            
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Order</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ order_count }}
+                                    </h5>
+                                
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                            <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Collection Agent</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ collector_count }}
-                                </h5>
-                            
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                            <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                         </div>
                     </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Customer</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ customer_count }}
-                                </h5>
-                            
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Collection Agent</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ collector_count }}
+                                    </h5>
+                                
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                            <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Delivery Agents</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ delivery_boy_count }}
-                                </h5>
-                            
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                            <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                         </div>
                     </div>
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Customer</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ customer_count }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                                <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Delivery Agents</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ delivery_boy_count }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row mt-4">
                 
+                
+
+                <div class="row mt-4">
+                    
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total <br> Collection</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ total_money_collected_all_times }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Today Orders</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ order_count_today }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Today Total Collection</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ total_money_collected_today }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Order</p>
+                                    <h5 class="font-weight-bolder">
+                                        {{ order_count }}
+                                    </h5>
+                                
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div> -->
+
+                    
+                    
+                    
                 </div>
             {% elif request.user.is_collector %}
                 <div class="row">
@@ -140,17 +237,21 @@
                                                 </td>
                                                 
                                                 <td class="align-middle">
-                                                    {% if order.confirm_cancel_pending == 'PENDING' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
-                                                    {% endif %} 
-                                                    {% if order.confirm_cancel_pending == 'CANCEL' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
-                                                    {% endif %} 
-                                                    {% if order.confirm_cancel_pending == 'CONFIRM' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                                                    {% if collector_order.delivery_boy_name %}
+                                                        {% if collector_order.delivery_status == 'PENDING' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
+                                                        {% endif %} 
+                                                        {% if collector_order.delivery_status == 'CANCEL' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
+                                                        {% endif %} 
+                                                        {% if collector_order.delivery_status == 'CONFIRM' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                                                        {% endif %}
+                                                        {% if collector_order.delivery_status == 'COMPLEATED' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
                                                     {% endif %}
-                                                    {% if order.confirm_cancel_pending == 'COMPLEATED' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
+                                                    {% elif collector_order.wholesaler_name %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-arrows-h me-2" style="color: black;"></i></a>
                                                     {% endif %}
                                                     <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
                                                 </td>
@@ -214,7 +315,7 @@
                                     {% if delivery_boy_orders %}
                                         
                                         {% for delivery_boy_order in delivery_boy_orders %}
-                                        {% if delivery_boy_order.confirm_cancel_pending == 'CONFIRM' or delivery_boy_order.confirm_cancel_pending == 'PENDING' or delivery_boy_order.confirm_cancel_pending == 'COMPLEATED' %}
+                                        {% if delivery_boy_order.delivery_status == 'CONFIRM' or delivery_boy_order.delivery_status == 'PENDING' or delivery_boy_order.delivery_status == 'COMPLEATED' %}
                                             <tr>
                                         
                                                 <td class="align-middle text-center">
@@ -226,14 +327,21 @@
                                                     <span class="text-secondary text-xs font-weight-bold">{{ delivery_boy_order.money_type }} - {{ delivery_boy_order.delivery_boy_amount }}</span>
                                                 </td>  
                                                 <td class="align-middle">
-                                                    {% if delivery_boy_order.confirm_cancel_pending == 'PENDING' %}
-                                                    <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
+                                                    {% if delivery_boy_order.delivery_boy_name %}
+                                                        {% if delivery_boy_order.delivery_status == 'PENDING' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
+                                                        {% endif %} 
+                                                        {% if delivery_boy_order.delivery_status == 'CANCEL' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
+                                                        {% endif %} 
+                                                        {% if delivery_boy_order.delivery_status == 'CONFIRM' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                                                        {% endif %}
+                                                        {% if delivery_boy_order.delivery_status == 'COMPLEATED' %}
+                                                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
                                                     {% endif %}
-                                                    {% if delivery_boy_order.confirm_cancel_pending == 'CONFIRM' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
-                                                    {% endif %}
-                                                    {% if delivery_boy_order.confirm_cancel_pending == 'COMPLEATED' %}
-                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: #fff;"></i> </a>
+                                                    {% elif delivery_boy_order.wholesaler_name %}
+                                                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-arrows-h me-2" style="color: black;"></i></a>
                                                     {% endif %}
                                                     
                                                     <a href="{% url 'delivery_boy_order_view' order_id=delivery_boy_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  

@@ -29,12 +29,56 @@
       {% endfor %}
       <div class="row">
         <div class="col-12">
+            <div class="card mb-2 pt-2 pb-2 p-3"> 
+                <form method="get" class="row g-3 align-items-center">
+                    <div class="col-md-4">
+                        <label for="start_date">Start Date:</label>
+                        <input class="form-control" type="date" id="start_date" name="start_date" value="{{ start_date }}">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="end_date">End Date:</label>
+                        <input class="form-control" type="date" id="end_date" name="end_date" value="{{ end_date }}">
+                    </div>
+            
+                    <div class="col-md-4 pt-5">
+                        <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
           <div class="card mb-4 min-vh-70">
 
-            <div class="card-header pb-0 d-flex align-items-center">
-              <h6 class="mb-0">Orders List</h6>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                  <div class="card-header pb-0 d-flex align-items-center">
+                      <h6 class="mb-0">Orders List</h6>
+                  </div>
+              </div>
               
-            </div>
+              <div class="col-md-2">
+                <div class="card-header pb-0 d-flex align-items-center">
+                  <span class="text-secondary text-xss font-weight-bold" > {{ total_total }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                  <div class="card-header pb-0 d-flex align-items-center">
+                      <h6 class="mb-0">Collected Total :</h6>
+                      <span class="text-secondary text-xss font-weight-bold" > {{ total_money_collected }}</span>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="card-header pb-0 d-flex align-items-center">
+                      <h6 class="mb-0">Pending Total : </h6>
+                      <span class="text-secondary text-xss font-weight-bold" > {{ total_money_pending }}</span>
+                  </div>
+              </div>
+          </div>
             
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -50,6 +94,7 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+                      <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   
@@ -75,19 +120,16 @@
                             <span class="text-secondary text-xs font-weight-bold">{{ order.collector_amount }}</span>
                         </td>
                         <td class="align-middle text-center">
-                            {% if order.money_collected %}
-                                <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
-                            {% else %}
-                                <span class="text-secondary text-xs font-weight-bold">0</span>
-                            {% endif %}
+                          
+                          <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                           
                         </td>
                         <td class="align-middle text-center">
-                            {% if order.money_pending %}
-                                <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
-                            {% else %}
-                                <span class="text-secondary text-xs font-weight-bold">{{ order.collector_amount }} </span>
-                            {% endif %}
+                          <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
                         </td>
+                        <td class="align-middle">
+                          <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
+                      </td>
                     
                       
                     </tr>

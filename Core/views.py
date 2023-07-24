@@ -4,6 +4,7 @@ from U_Auth.models import User
 from Admin_App.models import *
 from django.db import IntegrityError
 from django.contrib import messages
+from datetime import date
 
 # Create your views here.
 
@@ -16,6 +17,15 @@ def dashboard(request):
 
     collector_orders = Order.objects.filter(collector_name=request.user).order_by('-id')
     delivery_boy_orders = Order.objects.filter(delivery_boy_name=request.user).order_by('-id')
+
+    today = date.today()
+
+    # Filter orders for today and sum up the money_collected field
+    total_money_collected_today = Order.objects.filter(date=today).aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
+    order_count_today = Order.objects.filter(date=today).count()
+    
+    total_money_collected_all_times = Order.objects.aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
+    
     context = {
         'order_count' : order_count,
         'customer_count' : customer_count,
@@ -25,6 +35,10 @@ def dashboard(request):
         'collector_orders' : collector_orders,
         'delivery_boy_orders' : delivery_boy_orders,
         
+        'total_money_collected_today': total_money_collected_today,  
+        'order_count_today': order_count_today,
+
+        'total_money_collected_all_times': total_money_collected_all_times,
     }
     return render(request,'Core/dashboard.html', context)
 
@@ -51,7 +65,7 @@ def collector_order_view(request, order_id):
 def delivery_boy_order_view(request, order_id):
     order = Order.objects.get(id=order_id)
     if request.method == 'POST':
-        order.confirm_cancel_pending = request.POST.get('confirm_cancel_pending') 
+        order.delivery_status = request.POST.get('delivery_status') 
         order.comment = request.POST.get('comment')
         try:
             order.save()

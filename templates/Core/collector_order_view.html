@@ -94,13 +94,24 @@
                             <div class="container mt-3 mb-5 ">
                                 <h6>Delivery Agent</h6>
                                 <p>{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }}</p>
+                                {% if order.wholesaler_name == None %}
+                                    <p> </p>
+                                {% else %}
+                                <p>
+                                    {{ order.wholesaler_name }}
+                                </p>
+                                {% endif %}
                             </div>
                         </div>
 
                         <div class="col-md-6 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Status</h6>
-                                <p>{{ order.confirm_cancel_pending}}</p>
+                                {% if order.delivery_boy_name %}
+                                    <p>{{ order.delivery_status }}</p>
+                                {% elif order.wholesaler_name %}
+
+                                {% endif %}
                             </div>
                         </div>
                         {% if order.comment != '' %}
@@ -124,22 +135,19 @@
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Collected</h6>
-                                {% if order.money_collected %}
-                                    <p>{{ order.money_collected }}</p>
-                                {% else %}
-                                    <p>0</p>
-                                {% endif %}
+                                <p>{{ order.money_collected }}</p>
+                                
                             </div>
                         </div>
                         
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Pending</h6>
-                                {% if order.money_pending %}
-                                    <p>{{ order.money_pending }} </p>
-                                {% else %}
-                                    <p>{{ order.collector_amount }} </p>
-                                {% endif %}
+                            
+                                <p>{{ order.money_pending }} </p>
+                            
+                                
+                                
                             </div>
                         </div>
 

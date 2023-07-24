@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 from Admin_App.models import *
 from django.http import JsonResponse
-
+from datetime import datetime
 # Create your views here.
 
 
@@ -69,14 +69,58 @@ def collector_edit(request, collector_id):
     return render(request, 'Admin/collector_edit.html', {'collector': collector})
 
 
+# def collector_view(request, collector_id):
+#     collector = User.objects.get(id=collector_id, is_collector=True)
+#     orders = Order.objects.filter(collector_name=collector).order_by('-id')
+#     total_total = sum(order.total for order in orders)
+#     total_money_collected = sum(order.money_collected for order in orders)
+#     total_money_pending = sum(order.money_pending for order in orders)
+
+#     context = {
+#         'collector': collector,
+#         'orders': orders,
+        
+#         'total_total': total_total,
+#         'total_money_collected': total_money_collected,
+#         'total_money_pending': total_money_pending,
+#     }
+#     return render(request, 'Admin/collector_view.html', context)
+
 def collector_view(request, collector_id):
     collector = User.objects.get(id=collector_id, is_collector=True)
+
+    # Get the start and end time from the request parameters
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on the collector and date range
     orders = Order.objects.filter(collector_name=collector)
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
+    orders = orders.order_by('-id')
+
+    total_total = sum(order.total for order in orders)
+    total_money_collected = sum(order.money_collected for order in orders)
+    total_money_pending = sum(order.money_pending for order in orders)
+
     context = {
         'collector': collector,
         'orders': orders,
+        'total_total': total_total,
+        'total_money_collected': total_money_collected,
+        'total_money_pending': total_money_pending,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
     return render(request, 'Admin/collector_view.html', context)
+
 
 
 @login_required
@@ -154,7 +198,7 @@ def delivery_boy_edit(request, delivery_boy_id):
 
 def delivery_boy_view(request, delivery_boy_id):
     delivery_boy = User.objects.get(id=delivery_boy_id, is_delivery_boy=True)
-    orders = Order.objects.filter(delivery_boy_name=delivery_boy)
+    orders = Order.objects.filter(delivery_boy_name=delivery_boy).order_by('-id')
     context = {
         'delivery_boy': delivery_boy,
         'orders': orders,
@@ -229,6 +273,43 @@ def customer_edit(request, customer_id):
     return render(request, 'Admin/customer_edit.html', {'customer': customer})
 
 
+
+def customer_view(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+
+    # Get the start and end time from the request parameters
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on customer and date range
+    orders = Order.objects.filter(customer_name=customer)
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
+    orders = orders.order_by('-id')
+
+    total_total = sum(order.total for order in orders)
+    total_money_collected = sum(order.money_collected for order in orders)
+    total_money_pending = sum(order.money_pending for order in orders)
+
+    context = {
+        'customer': customer,
+        'orders': orders,
+        'total_total': total_total,
+        'total_money_collected': total_money_collected,
+        'total_money_pending': total_money_pending,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
+    }
+    return render(request, 'Admin/customer_view.html', context)
+
+
 @login_required
 def customer_delete(request, customer_id):
     try:
@@ -282,7 +363,7 @@ def wholesaler_add(request):
 def wholesaler_edit(request, wholesaler_id):
     try:
         wholesaler = Wholesaler.objects.get(id=wholesaler_id)
-    except wholesaler.DoesNotExist:
+    except Wholesaler.DoesNotExist:
         messages.error(request, f"wholesaler with ID {wholesaler_id} does not exist.")
         return redirect('wholesaler_list')
     if request.method == 'POST':
@@ -298,6 +379,14 @@ def wholesaler_edit(request, wholesaler_id):
             return redirect('wholesaler_edit', wholesaler_id=wholesaler_id)            
     return render(request, 'Admin/wholesaler_edit.html', {'wholesaler': wholesaler})
 
+def wholesaler_view(request, wholesaler_id):
+    wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+    context = {
+        'wholesaler': wholesaler,
+        'orders': orders,
+    }
+    return render(request, 'Admin/wholesaler_view.html', context)
 
 @login_required
 def wholesaler_delete(request, wholesaler_id):
@@ -408,8 +497,12 @@ def order_add(request):
                 bank_name=bank_name,
                 account=account,
                 ifse=ifse,
-                confirm_cancel_pending='PENDING',
-                comment = ''
+                delivery_status='PENDING',
+                comment = '',
+                
+                money_collected = 0,
+                money_pending = total
+
 
             )
             messages.success(request, f"Order added successfully.")
@@ -509,8 +602,11 @@ def order_edit(request, order_id):
         order.ifse = request.POST.get('ifse') 
 
         # for delivery boys
-        order.confirm_cancel_pending = 'PENDING'
+        order.delivery_status = 'PENDING'
         order.comment = ''
+        
+        order.money_collected = 0
+        order.money_pending = order.total
         try:
             order.save()
             messages.success(request, f"Order updated successfully.")
@@ -553,12 +649,29 @@ def order_delete(request, order_id):
             return redirect('order_list')
     
 
-def order_view(request, order_id):
-    order = Order.objects.get(id=order_id)
+
+
+
+@login_required
+def report(request):
+    # Get the start and end time from the request parameters
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on date range
+    orders = Order.objects.all().order_by('-id')
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
     context = {
-        'order' : order,
+        'order': orders,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
-    return render(request, 'Admin/order_view.html', context)
-
-
-
+    return render(request, 'Admin/report.html', context)

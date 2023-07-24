@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid py-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'customer_list' %}">Customers</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">{{ customer.name }} </a></li>
+        </ol>
+      </nav>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2 pt-2 pb-2 p-3"> 
+                    <form method="get" class="row g-3 align-items-center">
+                        <div class="col-md-4">
+                            <label for="start_date">Start Date:</label>
+                            <input class="form-control" type="date" name="start_date" value="{{ start_date }}">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label for="end_date">End Date:</label>
+                            <input class="form-control" type="date" name="end_date" value="{{ end_date }}">
+                        </div>
+                
+                        <div class="col-md-4 pt-5">
+                            <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                
+        </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4 min-vh-70">
+            
+
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="card-header pb-0 d-flex align-items-center">
+                        <h6 class="mb-0">Orders List</h6>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card-header pb-0 d-flex align-items-center">
+                      <span class="text-secondary text-xss font-weight-bold" > {{ total_total }}</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-header pb-0 d-flex align-items-center">
+                        <h6 class="mb-0">Collected Total :</h6>
+                        <span class="text-secondary text-xss font-weight-bold" > {{ total_money_collected }}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-header pb-0 d-flex align-items-center">
+                        <h6 class="mb-0">Pending Total : </h6>
+                        <span class="text-secondary text-xss font-weight-bold" > {{ total_money_pending }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
+                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+                    {% for order in orders %}
+                    <tr>
+                      
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                            <h6 class="mb-0 text-sm">{{ order.date }} </h6>
+                            </span>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.total }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                            
+                        </td>
+                        <td class="align-middle text-center">
+                            
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
+                            
+                        </td>
+                        <td class="align-middle">
+                            <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
+                        </td>
+                      
+                    </tr>
+                   
+                    
+                    {% endfor %}
+                  </tbody>
+                  
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}
+ 

@@ -28,7 +28,7 @@ class Order(models.Model):
         ('BANK' , 'BANK'),
         
     )
-    CONFIRM_CANCEL_PENDING = (
+    DELIVERY_STATUS = (
         ('CONFIRM', 'CONFIRM'),
         ('CANCEL', 'CANCEL'),
         ('PENDING', 'PENDING'),
@@ -81,7 +81,7 @@ class Order(models.Model):
     ifse = models.CharField(max_length=500, null=True, blank=True)
 
     # Delivery boy status
-    confirm_cancel_pending = models.CharField(max_length=500, choices=CONFIRM_CANCEL_PENDING, null=True, blank=True)
+    delivery_status = models.CharField(max_length=500, choices=DELIVERY_STATUS, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True, blank=True)
     def __str__ (self):
         return self.name
