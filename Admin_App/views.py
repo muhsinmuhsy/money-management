@@ -197,12 +197,42 @@ def delivery_boy_edit(request, delivery_boy_id):
     return render(request, 'Admin/delivery_boy_edit.html', {'delivery_boy': delivery_boy})
 
 
+# def delivery_boy_view(request, delivery_boy_id):
+#     delivery_boy = User.objects.get(id=delivery_boy_id, is_delivery_boy=True)
+#     orders = Order.objects.filter(delivery_boy_name=delivery_boy).order_by('-id')
+#     context = {
+#         'delivery_boy': delivery_boy,
+#         'orders': orders,
+#     }
+#     return render(request, 'Admin/delivery_boy_view.html', context)
+
+
 def delivery_boy_view(request, delivery_boy_id):
     delivery_boy = User.objects.get(id=delivery_boy_id, is_delivery_boy=True)
-    orders = Order.objects.filter(delivery_boy_name=delivery_boy).order_by('-id')
+
+    # Get the start and end time from the request parameters
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on the delivery_boy and date range
+    orders = Order.objects.filter(delivery_boy_name=delivery_boy)
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
+    orders = orders.order_by('-id')
+
+
     context = {
         'delivery_boy': delivery_boy,
         'orders': orders,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
     return render(request, 'Admin/delivery_boy_view.html', context)
 
@@ -380,12 +410,45 @@ def wholesaler_edit(request, wholesaler_id):
             return redirect('wholesaler_edit', wholesaler_id=wholesaler_id)            
     return render(request, 'Admin/wholesaler_edit.html', {'wholesaler': wholesaler})
 
+# def wholesaler_view(request, wholesaler_id):
+#     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+#     orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+#     context = {
+#         'wholesaler': wholesaler,
+#         'orders': orders,
+#     }
+#     return render(request, 'Admin/wholesaler_view.html', context)
+
+
 def wholesaler_view(request, wholesaler_id):
     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
-    orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+
+    # Get the start and end time from the request parameters
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on wholesaler and date range
+    orders = Order.objects.filter(wholesaler_name=wholesaler)
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
+    orders = orders.order_by('-id')
+
+    total_total = sum(order.total for order in orders)
+    
+
     context = {
         'wholesaler': wholesaler,
         'orders': orders,
+        'total_total': total_total,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
     return render(request, 'Admin/wholesaler_view.html', context)
 
@@ -716,6 +779,7 @@ def salary_delivery_boy_salary_list(request, delivery_boy_id):
     delivery_boy = User.objects.get(id=delivery_boy_id)
 
     if request.method == 'POST':
+        date = request.POST.get('date')
         salary_amount = request.POST.get('salary_amount')
 
         try:
@@ -729,6 +793,7 @@ def salary_delivery_boy_salary_list(request, delivery_boy_id):
             else:
                 DeliveryBoySalary.objects.create(
                     delivery_boy_name=delivery_boy,
+                    date=date,
                     salary_amount=salary_amount
                 )
 
@@ -752,7 +817,7 @@ def salary_delivery_boy_delete(request, salary_id):
 
     try:
         salary.delete()
-        messages.success(request, f"Saalry Delete successfully.")
+        messages.success(request, f"Salry Delete successfully.")
         return redirect('salary_delivery_boy_salary_list', delivery_boy_id=salary.delivery_boy_name.id)
     except IntegrityError:
             messages.error(request, f"Salary Delete Failed.")

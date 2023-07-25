@@ -96,11 +96,11 @@ def delivery_boy_salary_view(request):
 def profile(request):
     user = request.user
     if user.is_superuser:
-        role = 'Superuser'
+        role = 'Admin'
     elif user.is_collector:
-        role = 'collector'
+        role = 'collection Agent'
     elif user.is_delivery_boy:
-        role = 'Delivery Boy'
+        role = 'Delivery Agent'
     else:
         role = 'User Not Found'
     

@@ -2,127 +2,53 @@
 {% load static %}
 {% block content %}
     {% include 'nav.html' %}
-    
     <div class="container-fluid py-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
-            <li class="breadcrumb-item"><a href="javascript:;">Order Details</a></li>
-            </ol>
-        </nav>
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-            <div class="alert alert-danger alert-dismissible fade show " role="alert">
-                <span class="text-white">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="javascript:;">Profile</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;"></a></li>
+        </ol>
+      </nav>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+      
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card  text-center" >
+            <div class="card-body z-index-2 py-9">
+              <h2 class="text-white">{{ user.username }}</h2>
+              <p class="text-white">
+                {{ user.first_name }} {{ user.last_name }}
+              </p>
+              <p class="text-white">
+                {{ user.mobile_no }}
+              </p>
+              <label class="badge badge-light text-white">{{ role }}</label>
             </div>
-            {% endif %}
-            {% if message.tags == 'success' %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <span class="text-white">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endif %}
-        {% endfor %}
-        
-        <div class="row">
-            <div class="col-12">
-                <div class="card mb-4 min-vh-70">
-                    <div class="row">
-                        
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Date</h6>
-                                <p>{{ order.date }}</p>
-                            </div>
-                        </div>
-                        
-
-                        <hr class="horizontal dark">
-
-                        <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>{{ order.money_type }}</h6>
-                                     
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>amount</h6>
-                                <p>{{ order.mrp }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Quantit</h6>
-                                <p>{{ order.quantity }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Total</h6>
-                                <p>{{ order.total }}</p>
-                            </div>
-                        </div>
-                        <hr class="horizontal dark">
-                        
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Name</h6>
-                                <p>{{ order.name }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Moble</h6>
-                                <p>{{ order.mobile }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Address</h6>
-                                <p>{{ order.address }}</p>
-                            </div>
-                        </div>
-                        <hr class="horizontal dark">
-                        <div class="col-md-2 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Delivery Agent</h6>
-                                <p>{{ order.delivery_boy_name }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Status</h6>
-                                <p>{{ order.confirm_cancel_pending}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Cancel Review</h6>
-                                <p>{{ order.comment}}</p>
-                            </div>
-                        </div>
-                        
-                        
-                    </div>
-                    
-
-                    
-                    
-                    
-                    
-                </div>
-            </div>
+            <div class="mask bg-gradient-primary border-radius-lg"></div>
+          </div>
         </div>
-    
+        
+      </div>
+      
     </div>
+  </main>
 {% endblock %}
-
-
+ 

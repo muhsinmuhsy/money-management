@@ -54,7 +54,10 @@
                             <div class="modal-body">
                                 <form method="post" >
                                     {% csrf_token %}
-                                
+
+                                    <label for="date">Date:</label>
+                                    <input type="date" id="date" name="date" class="form-control" required>
+
                                     <label for="salary_amount">Salary Amount:</label>
                                     <input type="text"  name="salary_amount" class="form-control" required>
                                 
@@ -119,5 +122,16 @@
       
     </div>
   </main>
+
+  <script>
+    // Get the current date
+    var currentDate = new Date();
+
+    // Format the date as YYYY-MM-DD
+    var formattedDate = currentDate.toISOString().substr(0, 10);
+
+    // Set the default value of the input field
+    document.getElementById("date").value = formattedDate;
+</script>
 {% endblock %}
  

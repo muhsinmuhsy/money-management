@@ -92,5 +92,5 @@ class DeliveryBoySalary(models.Model):
         limit_choices_to={'is_delivery_boy': True},
         on_delete=models.CASCADE, null=True, blank=True
     )
-    date = models.DateField(auto_now_add=True, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     salary_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
