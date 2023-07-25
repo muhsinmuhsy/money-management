@@ -5,6 +5,7 @@ from Admin_App.models import *
 from django.db import IntegrityError
 from django.contrib import messages
 from datetime import date
+from django.utils import timezone
 
 # Create your views here.
 
@@ -14,9 +15,7 @@ def dashboard(request):
     customer_count = Customer.objects.count()
     collector_count = User.objects.filter(is_collector=True).count()
     delivery_boy_count = User.objects.filter(is_delivery_boy=True).count()
-
-    collector_orders = Order.objects.filter(collector_name=request.user).order_by('-id')
-    delivery_boy_orders = Order.objects.filter(delivery_boy_name=request.user).order_by('-id')
+    # total_money_collected_all_times = Order.objects.aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
 
     today = date.today()
 
@@ -24,21 +23,29 @@ def dashboard(request):
     # total_money_collected_today = Order.objects.filter(date=today).aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
     order_count_today = Order.objects.filter(date=today).count()
     
-    total_money_collected_all_times = Order.objects.aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
+
+    collector_orders = Order.objects.filter(collector_name=request.user).order_by('-id')
+    delivery_boy_orders = Order.objects.filter(delivery_boy_name=request.user).order_by('-id')
+
+    users = User.objects.all().order_by('-last_login')
+    user_logins = [(u.username, u.last_login.astimezone(timezone.get_current_timezone()) if u.last_login is not None else None) for u in users]
     
     context = {
         'order_count' : order_count,
         'customer_count' : customer_count,
         'collector_count' : collector_count,
         'delivery_boy_count' : delivery_boy_count,
+        # 'total_money_collected_all_times': total_money_collected_all_times,
 
-        'collector_orders' : collector_orders,
-        'delivery_boy_orders' : delivery_boy_orders,
-        
         # 'total_money_collected_today': total_money_collected_today,  
         'order_count_today': order_count_today,
+        
+        'collector_orders' : collector_orders,
+        'delivery_boy_orders' : delivery_boy_orders,
 
-        'total_money_collected_all_times': total_money_collected_all_times,
+        'user_logins': user_logins,
+        
+        
     }
     return render(request,'Core/dashboard.html', context)
 
@@ -78,8 +85,12 @@ def delivery_boy_order_view(request, order_id):
     }
     return render(request, 'Core/delivery_boy_order_view.html', context)
 
-
- 
+def delivery_boy_salary_view(request):
+    salary = DeliveryBoySalary.objects.filter(delivery_boy_name=request.user).order_by('-id')
+    context = {
+        'salary' : salary,
+    }
+    return render(request, 'Core/delivery_boy_salary_view.html', context)
 
 @login_required
 def profile(request):
@@ -98,3 +109,5 @@ def profile(request):
         'role' : role,
     }
     return render(request, 'Core/profile.html', context)
+
+

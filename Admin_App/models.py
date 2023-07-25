@@ -37,11 +37,11 @@ class Order(models.Model):
     date = models.DateField(null=True, blank=True)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     money_type = models.CharField(max_length=500, choices=MONEY_TYPE, null=True, blank=True)
-    mrp = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    mrp = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     quantity = models.PositiveIntegerField( null=True, blank=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    total = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
 
-    collector_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    collector_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     collector_name = models.ForeignKey(
         User,
         limit_choices_to={'is_collector': True},
@@ -52,12 +52,12 @@ class Order(models.Model):
     mobile = models.CharField(max_length=500, null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     # Collected
-    money_collected = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    money_pending = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    money_collected = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+    money_pending = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     
 
     delivery_type = models.CharField(max_length=500, choices=DELIVERY_TYPE, null=True, blank=True)
-    delivery_boy_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    delivery_boy_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
 
     delivery_boy_name = models.ForeignKey(
         User,
@@ -86,3 +86,11 @@ class Order(models.Model):
     def __str__ (self):
         return self.name
 
+class DeliveryBoySalary(models.Model):
+    delivery_boy_name = models.ForeignKey(
+        User,
+        limit_choices_to={'is_delivery_boy': True},
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    date = models.DateField(auto_now_add=True, null=True, blank=True)
+    salary_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)

@@ -23,7 +23,7 @@ urlpatterns = [
     path('customer_add/', customer_add, name='customer_add'),
     path('customer_edit/<int:customer_id>/', customer_edit, name='customer_edit'),
     path('customer_view/<int:customer_id>/', customer_view, name='customer_view'),
-    path('customer_delete/<int:customer_id>/', customer_delete, name='customer_delete'),\
+    path('customer_delete/<int:customer_id>/', customer_delete, name='customer_delete'),
     
     # ---------------------------------------------- Wholesaler -------------------------------------------------------- #
 
@@ -43,5 +43,13 @@ urlpatterns = [
     # for automatic field add
     path('get_customer_details/', get_customer_details, name='get_customer_details'),
 
+    # ---------------------------------------------- Report -------------------------------------------------------- #
+
     path('report/', report, name='report'),
-]
+
+    # ---------------------------------------------- Salary -------------------------------------------------------- #
+
+    path('salary_delivery_boy_list/', salary_delivery_boy_list, name='salary_delivery_boy_list'),
+    path('salary_delivery_boy_salary_list/<int:delivery_boy_id>/', salary_delivery_boy_salary_list, name='salary_delivery_boy_salary_list'),
+    path('salary_delivery_boy_delete/<int:salary_id>/', salary_delivery_boy_delete, name='salary_delivery_boy_delete'),
+]   

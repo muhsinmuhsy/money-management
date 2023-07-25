@@ -6,6 +6,7 @@ from django.contrib import messages
 from Admin_App.models import *
 from django.http import JsonResponse
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 # Create your views here.
 
 
@@ -472,7 +473,7 @@ def order_add(request):
                 customer_name=customer, 
 
                 money_type=money_type, 
-                mrp=mrp,
+                mrp=Decimal(mrp),
                 quantity=quantity,
                 total=total,
 
@@ -502,13 +503,14 @@ def order_add(request):
                 
                 money_collected = 0,
                 money_pending = total
-
-
             )
             messages.success(request, f"Order added successfully.")
             return redirect('order_list')
         except IntegrityError:
             messages.error(request, f"Order add Failed.")
+            return redirect('order_add')
+        except (TypeError, InvalidOperation):
+            messages.error(request, "Invalid Value. Please provide a valid number.")
             return redirect('order_add')
         
     context = {
@@ -649,7 +651,7 @@ def order_delete(request, order_id):
             return redirect('order_list')
     
 
-
+# ---------------------------------------------- Report -------------------------------------------------------- #
 
 
 @login_required
@@ -698,3 +700,60 @@ def report(request):
     return render(request, 'Admin/report.html', context)
 
 
+# ---------------------------------------------- Delivery Boy Salery -------------------------------------------------------- #
+
+@login_required
+def salary_delivery_boy_list(request):
+    delivery_boy = User.objects.filter(is_delivery_boy=True)
+    context = {
+        'delivery_boy' : delivery_boy,
+    }
+    return render(request, 'Admin/salary_delivery_boy_list.html', context)
+
+
+@login_required
+def salary_delivery_boy_salary_list(request, delivery_boy_id):
+    delivery_boy = User.objects.get(id=delivery_boy_id)
+
+    if request.method == 'POST':
+        salary_amount = request.POST.get('salary_amount')
+
+        try:
+            salary_amount = Decimal(salary_amount)
+        except (TypeError, InvalidOperation):
+            messages.error(request, 'Invalid salary amount. Please provide a valid number.')
+        else:
+            
+            if salary_amount <= 0:
+                messages.error(request, 'Salary amount should be a positive number.')
+            else:
+                DeliveryBoySalary.objects.create(
+                    delivery_boy_name=delivery_boy,
+                    salary_amount=salary_amount
+                )
+
+    
+    salary = DeliveryBoySalary.objects.filter(delivery_boy_name=delivery_boy).order_by('-id')
+
+    context = {
+        'salary': salary,
+        'delivery_boy': delivery_boy,
+    }
+    return render(request, 'Admin/salary_delivery_boy_salary_list.html', context)
+
+
+@login_required
+def salary_delivery_boy_delete(request, salary_id):
+    try:
+        salary = DeliveryBoySalary.objects.get(id=salary_id)
+    except Order.DoesNotExist:
+        messages.error(request, f"Order with ID {salary_id} does not exist.")
+        return redirect('salary_delivery_boy_salary_list', delivery_boy_id=salary.delivery_boy_name.id)
+
+    try:
+        salary.delete()
+        messages.success(request, f"Saalry Delete successfully.")
+        return redirect('salary_delivery_boy_salary_list', delivery_boy_id=salary.delivery_boy_name.id)
+    except IntegrityError:
+            messages.error(request, f"Salary Delete Failed.")
+            return redirect('salary_delivery_boy_salary_list', delivery_boy_id=salary.delivery_boy_name.id)
