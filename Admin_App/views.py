@@ -669,9 +669,32 @@ def report(request):
     if end_date:
         orders = orders.filter(date__lte=end_date)
 
+    # Count the total orders within the selected date range
+    order_count = orders.count()
+
+    # Count the orders with 'INR to AED' money type within the selected date range
+    inr_to_aed_count = orders.filter(money_type='INR to AED').count()
+
+    # Count the orders with 'AED to INR' money type within the selected date range
+    aed_to_inr_count = orders.filter(money_type='AED to INR').count()
+
+    # Count the orders with delivery status 'COMPLEATED' within the selected date range
+    compleated_count = orders.filter(delivery_status='COMPLEATED').count()
+
+    total_money_collected = sum(order.money_collected for order in orders)
+    total_money_pending = sum(order.money_pending for order in orders)
+
     context = {
-        'order': orders,
+        'orders': orders,
         'start_date': start_date_str,
         'end_date': end_date_str,
+        'order_count': order_count,
+        'inr_to_aed_count': inr_to_aed_count,
+        'aed_to_inr_count': aed_to_inr_count,
+        'total_money_collected': total_money_collected,
+        'total_money_pending': total_money_pending,
+        'compleated_count': compleated_count,
     }
     return render(request, 'Admin/report.html', context)
+
+

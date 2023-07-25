@@ -21,7 +21,7 @@ def dashboard(request):
     today = date.today()
 
     # Filter orders for today and sum up the money_collected field
-    total_money_collected_today = Order.objects.filter(date=today).aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
+    # total_money_collected_today = Order.objects.filter(date=today).aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
     order_count_today = Order.objects.filter(date=today).count()
     
     total_money_collected_all_times = Order.objects.aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
@@ -35,7 +35,7 @@ def dashboard(request):
         'collector_orders' : collector_orders,
         'delivery_boy_orders' : delivery_boy_orders,
         
-        'total_money_collected_today': total_money_collected_today,  
+        # 'total_money_collected_today': total_money_collected_today,  
         'order_count_today': order_count_today,
 
         'total_money_collected_all_times': total_money_collected_all_times,

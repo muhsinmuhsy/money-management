@@ -5,7 +5,7 @@
     <div class="container-fluid py-4">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="javascript:;">order List</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">Report</a></li>
           <li class="breadcrumb-item"><a href="javascript:;"></a></li>
         </ol>
       </nav>
@@ -31,7 +31,7 @@
         <div class="col-12">
             <div class="card mb-2 pt-2 pb-2 p-3"> 
                 <form method="get" class="row g-3 align-items-center">
-                    <div class="col-md-4">
+                    <div class="col-md-4 ">
                         <label for="start_date">Start Date:</label>
                         <input class="form-control" type="date" name="start_date" value="{{ start_date }}">
                     </div>
@@ -49,15 +49,89 @@
         </div>
             
       </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-2 ">
+
+            
+            
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th> -->
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Order</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total INR to AED</th>
+                      
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal AED to INR</th>
+                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total COllected</th>
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TOTAL PENDING AMOUNT</th>
+                     
+                     
+                      
+
+                      
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+                    
+                    <tr>
+                      
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ order_count }} </h6>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ inr_to_aed_count }} </h6>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ aed_to_inr_count }} </h6>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ total_money_collected }} </h6>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ total_money_pending }} </h6>
+                        </span>
+                      </td>
+                      
+                      
+                      
+                    </tr>
+                   
+                    
+                   
+                  </tbody>
+                  
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-12">
           <div class="card mb-4 min-vh-50">
 
             <div class="card-header pb-0 d-flex align-items-center">
               <h6 class="mb-0">Orders List</h6>
-              <a href="{% url 'order_add' %}" class="ms-auto">
-                <button class="btn btn-primary btn-sm " >Add</button>
-              </a>
               
             </div>
             
@@ -72,29 +146,25 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Amount</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
+
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Boy Name</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Status</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent Status</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   
                   <tbody>
-                    {% for order in order %}
+                    {% for order in orders %}
                     <tr>
-                      <!-- <td>
-                        <div class="d-flex px-2 py-1">
-                          
-                          <div class="d-flex flex-column justify-content-center ">
-                            <h6 class="mb-0 text-sm">{{ order.first_name }} {{ order.last_name }}</h6>
-                            
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0">{{ order.email }}</p>
-                        
-                      </td> -->
+                      
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
                           <h6 class="mb-0 text-sm">{{ order.date }} </h6>
@@ -107,39 +177,55 @@
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
                       </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.mrp }}</span>
+                      </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.quantity }}</span>
+                      </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.total }}</span>
+                      </td>
+                      
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</span>
                     </td>
+
+                    <td class="align-middle text-center">
+                            
+                      <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                      
+                  </td>
+                  <td class="align-middle text-center">
+                      
+                      <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
+                      
+                  </td>
                     
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
                         <span class="text-secondary text-xs font-weight-bold">{{ order.wholesaler_name.name }}</span>   
                       </td>
                       <td class="align-middle text-center">
-                        <!-- {% if order.delivery_status == 'PENDING' %}
-                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: skyblue;"></i></a>
-                        {% endif %} 
-                        {% if order.delivery_status == 'CANCEL' %}
-                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: red;"></i></a>
-                        {% endif %} 
-                        {% if order.delivery_status == 'CONFIRM' %}
-                          <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-circle me-2" style="color: greenyellow;"></i></a>
-                        {% endif %}  -->
+                       
                         {% if order.delivery_boy_name %}
                           {% if order.delivery_status == 'PENDING' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-clock-o me-2" style="color: black;"></i></a>
+                            <a href="" class="text-secondary font-weight-bold text-xs">PENDING</a>
                           {% endif %} 
                           {% if order.delivery_status == 'CANCEL' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-times me-2" style="color: red;"></i></a>
+                            <a href="" class="text-secondary font-weight-bold text-xs">CANCELED</a>
                           {% endif %} 
                           {% if order.delivery_status == 'CONFIRM' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-check me-2" style="color:  rgb(30, 138, 181);"></i></a>
+                            <a href="" class="text-secondary font-weight-bold text-xs">CONFIRMED</a>
                           {% endif %}
                           {% if order.delivery_status == 'COMPLEATED' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs"><i class="fas fa-check-double me-2" style="color: rgb(30, 138, 181);"></i></a>
+                            <a href="" class="text-secondary font-weight-bold text-xs">COMPLEATED</a>
                           {% endif %}
                         {% elif order.wholesaler_name %}
-                        <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-arrows-h me-2" style="color: black;"></i></a>
+                        <a href="" class="text-secondary font-weight-bold text-xs">NONE</a>
                         {% endif %}
 
                       </td>
