@@ -78,13 +78,58 @@
 
                                 <!--- Calculation -->
 
+                                <h6 class="pt-4">
+                                    Purchase Information
+                                </h6>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Amount</label>
+                                    <input class="form-control" type="text" value="{{ order.purchase_mrp }}" name="purchase_mrp" id="purchase_mrp" placeholder="Amount">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h6 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">X</h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Quantity</label>
+                                    <input class="form-control" type="number" value="{{ order.purchase_quantity }}" placeholder="Quantity" name="purchase_quantity" id="purchase_quantity" required   >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h5 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">=</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Total</label>
+                                    <input class="form-control" type="text" value="{{ order.purchase_total }}" name="purchase_total" id="purchase_total"  readonly >
+                                    </div>
+                                </div>
+
+
+                                <h6 class="pt-4">
+                                    Sales information
+                                </h6>
+
                                 <div class="col-md-3">
                                     <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">Amount</label>
                                     <input class="form-control" value="{{ order.mrp }}" type="text" name="mrp" id="mrp" placeholder="Amount">
                                     </div>
                                 </div>
-
 
                                 
                                 <div class="col-md-1">

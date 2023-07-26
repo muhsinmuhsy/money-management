@@ -44,6 +44,9 @@
                         <div class="col-md-4 pt-5">
                             <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
                         </div>
+                        <div class="col-md-4 ">
+                          <input type="submit" class="btn btn-success" name="export" value="Export to Excel" onclick="return confirm('Do you Want to Download this sheet as Excel ?')">
+                      </div>
                     </form>
                 </div>
             </div>
@@ -56,26 +59,26 @@
 
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <div class="card-header pb-0 d-flex align-items-center">
+                    <!-- <div class="card-header pb-0 d-flex align-items-center">
                         <h6 class="mb-0">Orders List</h6>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-2">
-                    <div class="card-header pb-0 d-flex align-items-center">
+                    <!-- <div class="card-header pb-0 d-flex align-items-center">
                       <span class="text-secondary text-xss font-weight-bold" > {{ total_total }}</span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="col-md-3">
                     <div class="card-header pb-0 d-flex align-items-center">
-                        <h6 class="mb-0">Collected Total :</h6>
-                        <span class="text-secondary text-xss font-weight-bold" > {{ total_money_collected }}</span>
+                        <h6 class="mb-0">Debit Total :</h6>
+                        <span class="text-secondary text-xss font-weight-bold" > {{ total_debit_total_sum }}</span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card-header pb-0 d-flex align-items-center">
-                        <h6 class="mb-0">Pending Total : </h6>
-                        <span class="text-secondary text-xss font-weight-bold" > {{ total_money_pending }}</span>
+                        <h6 class="mb-0">Credit Total : </h6>
+                        <span class="text-secondary text-xss font-weight-bold" style="padding-left: 5px;" > {{ total_credit_money_pending }}</span>
                     </div>
                 </div>
             </div>
@@ -90,11 +93,11 @@
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
                       
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Debit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Credit</th>
+                      <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th> -->
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -110,22 +113,40 @@
                         </td>
                         
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.money_collected == 0 %}
+                                  Sales
+                              {% else %}
+                                  Purchase
+                              {% endif %}
+                            </span>
                         </td>
                         
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.total }}</span>
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.money_collected == 0 %}
+                                {{ order.total }}
+                              {% else %}
+                                
+                              {% endif %}
+                            </span>
                         </td>
+                        
                         <td class="align-middle text-center">
-                            
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if order.money_collected == 0 %}
+                            {% else %}
+                              {{ order.money_pending }}
+                            {% endif %}
+                          </span>
                             
                         </td>
-                        <td class="align-middle text-center">
+
+                        <!-- <td class="align-middle text-center">
                             
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
-                            
-                        </td>
+                          <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                          
+                        </td> -->
                         <td class="align-middle">
                             <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
                         </td>

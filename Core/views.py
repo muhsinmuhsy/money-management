@@ -92,6 +92,51 @@ def delivery_boy_salary_view(request):
     }
     return render(request, 'Core/delivery_boy_salary_view.html', context)
 
+
+
+@login_required
+def collector_customers_list(request):
+    # Get the current authenticated collector
+    collector = request.user  # Assuming you are using Django's built-in authentication
+
+    # Get the list of customers associated with the collector's orders
+    customers_list = Order.objects.filter(collector_name=collector).values_list('customer_name', flat=True).distinct()
+
+    # Now you have a list of customer IDs associated with the collector's orders
+    # You can fetch the actual Customer objects using the IDs
+    customers = Customer.objects.filter(id__in=customers_list)
+
+    context = {
+        'customers': customers
+    }
+    return render(request, 'Core/collector_customers_list.html', context)
+
+@login_required
+def collector_customer_orders(request, customer_id):
+    # Get the current authenticated collector
+    collector = request.user  # Assuming you are using Django's built-in authentication
+
+    # Get the customer associated with the provided customer_id
+    customer = Customer.objects.get(id=customer_id)
+
+    # Get the list of orders for the specific customer handled by the collector
+    customer_orders = Order.objects.filter(collector_name=collector, customer_name=customer)
+
+    total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in customer_orders)
+    total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in customer_orders)
+
+    
+    context = {
+        'customer': customer,
+        'orders': customer_orders,
+        'total_money_collected': total_money_collected,
+        'total_money_pending': total_money_pending,
+    }
+
+    return render(request, 'Core/collector_customer_orders.html', context)
+
+
+
 @login_required
 def profile(request):
     user = request.user

@@ -5,8 +5,8 @@
     <div class="container-fluid py-4">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'collector_list' %}">Collection Agent</a></li>
-          <li class="breadcrumb-item"><a href="javascript:;">{{ collector.first_name }} {{ collector.last_name }}</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'collector_customers_list' %}">Customer List</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">{{ customer.name }}</a></li>
         </ol>
       </nav>
       {% for message in messages %}
@@ -27,36 +27,16 @@
           </div>
         {% endif %}
       {% endfor %}
-      <div class="row">
-        <div class="col-12">
-            <div class="card mb-2 pt-2 pb-2 p-3"> 
-                <form method="get" class="row g-3 align-items-center">
-                    <div class="col-md-4">
-                        <label for="start_date">Start Date:</label>
-                        <input class="form-control" type="date" id="start_date" name="start_date" value="{{ start_date }}">
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label for="end_date">End Date:</label>
-                        <input class="form-control" type="date" id="end_date" name="end_date" value="{{ end_date }}">
-                    </div>
-            
-                    <div class="col-md-4 pt-5">
-                        <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-      </div>
+      
 
       <div class="row">
         <div class="col-12">
           <div class="card mb-4 min-vh-70">
 
-            <!-- <div class="row mb-3">
+            <div class="row mb-3">
               <div class="col-md-4">
                   <div class="card-header pb-0 d-flex align-items-center">
-                      <h6 class="mb-0">Orders List</h6>
+                      <h6 class="mb-0">Orders List </h6>
                   </div>
               </div>
               
@@ -78,7 +58,7 @@
                       <span class="text-secondary text-xss font-weight-bold" > {{ total_money_pending }}</span>
                   </div>
               </div>
-            </div> -->
+            </div>
             
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -88,7 +68,7 @@
                       
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
+                      <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th> -->
                       <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th> -->
                       <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th> -->
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
@@ -107,15 +87,10 @@
                             <h6 class="mb-0 text-sm">{{ order.date }} </h6>
                             </span>
                         </td>
-                        <td class="align-middle text-center">
+                        <!-- <td class="align-middle text-center">
                             <span class="text-secondary text-xs font-weight-bold">{{ order.customer_name }}</span>
-                        </td>
-                        <!-- <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
                         </td> -->
-                        <!-- <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</span>
-                        </td> -->
+                       
                         <td class="align-middle text-center">
                             <span class="text-secondary text-xs font-weight-bold">{{ order.collector_amount }}</span>
                         </td>
@@ -133,9 +108,7 @@
                             {% endif %}
                           </span>
                         </td>
-                        <td class="align-middle">
-                          <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
-                      </td>
+                        
                     
                       
                     </tr>

@@ -33,6 +33,13 @@
             <div class="col-12">
                 <div class="card mb-4 ">
                     <div class="row">
+
+                        <div class="col-md-12 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Customer</h6>
+                                <p>{{ order.customer_name }}</p>
+                            </div>
+                        </div>
                         
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
@@ -144,10 +151,11 @@
                             <div class="container mt-3 mb-5 ">
                                 <h6>Pending</h6>
                             
-                                <p>{{ order.money_pending }} </p>
+                                <p>
+                                    {{ order.money_pending }}
+                                 </p>
                             
-                                
-                                
+            
                             </div>
                         </div>
 
@@ -176,15 +184,15 @@
                                             {% csrf_token %}
                                             <label>Total</label>
                                             <div class="input-group mb-3">
-                                                <input type="number" name="collector_amount" class="form-control" readonly value="{{ order.collector_amount }}" aria-label="Name" aria-describedby="name-addon">
+                                                <input type="text" name="collector_amount" class="form-control" readonly value="{{ order.collector_amount }}" aria-label="Name" aria-describedby="name-addon">
                                             </div>
                                             <label>Pending</label>
                                             <div class="input-group mb-3">
-                                                <input type="number" name="money_pending" class="form-control" readonly value="{{ order.money_pending }}" aria-label="Email" aria-describedby="email-addon" id="money_collected">
+                                                <input type="text" name="money_pending" class="form-control" readonly value="{{ order.money_pending }}" aria-label="Email" aria-describedby="email-addon" id="money_collected">
                                             </div>
                                             <label>Collected</label>
                                             <div class="input-group mb-3">
-                                                <input type="number" required name="money_collected" class="form-control" value="{{ order.money_collected }}" aria-label="Password" aria-describedby="password-addon" id="money_pending">
+                                                <input type="text" required name="money_collected" class="form-control" value="{{ order.money_collected }}" aria-label="Password" aria-describedby="password-addon" id="money_pending">
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">Submit</button>

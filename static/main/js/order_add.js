@@ -23,21 +23,68 @@ $(document).ready(function() {
 
 /***************************************** Calculation Automatixc Amount field add *********************************************************/
 
+// // Function to calculate the total based on MRP and Quantity
+// function calculateTotal() {
+//     const mrp = parseFloat(document.getElementById('mrp').value);
+//     const quantity = parseInt(document.getElementById('quantity').value);
+//     const total = mrp * quantity;
+//     document.getElementById('total').value = total.toFixed(2);
+
+//     // Update the Amount field with the same value as the Total field
+//     document.getElementById('collector_amount').value = total.toFixed(2);
+//     document.getElementById('delivery_boy_amount').value = quantity;
+// }
+
+// // Call the calculateTotal function when MRP or Quantity changes
+// document.getElementById('mrp').oninput = calculateTotal;
+// document.getElementById('quantity').oninput = calculateTotal;
+
+
+
+// //       ///     ////  ///        //   ///   ///    ///   ///   ///  ///  ///  //  //// /  ////// 
+
+// // Function to calculate the total based on MRP and Quantity
+// function calculateTotal2() {
+//     const purchase_mrp = parseFloat(document.getElementById('purchase_mrp').value);
+//     const purchase_quantity = parseInt(document.getElementById('purchase_quantity').value);
+//     const purchase_total = purchase_mrp * purchase_quantity;
+
+//     document.getElementById('purchase_total').value = purchase_total.toFixed(2);
+
+//     // Update the Amount field with the same value as the Purchase Quantity field
+//     document.getElementById('quantity').value = purchase_quantity;
+// }
+
+// // Call the calculateTotal2 function when MRP or purchase_Quantity changes
+// document.getElementById('purchase_mrp').oninput = calculateTotal2;
+// document.getElementById('purchase_quantity').oninput = calculateTotal2;
+
+
 // Function to calculate the total based on MRP and Quantity
 function calculateTotal() {
+    const purchase_mrp = parseFloat(document.getElementById('purchase_mrp').value);
+    const purchase_quantity = parseInt(document.getElementById('purchase_quantity').value);
+    const purchase_total = purchase_mrp * purchase_quantity;
+
+    // Set the calculated values to their respective fields
+    document.getElementById('purchase_total').value = purchase_total.toFixed(2);
+    document.getElementById('quantity').value = purchase_quantity;
+
+    // Calculate the total based on MRP and the newly updated quantity
     const mrp = parseFloat(document.getElementById('mrp').value);
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const total = mrp * quantity;
+    const total = mrp * purchase_quantity;
     document.getElementById('total').value = total.toFixed(2);
 
     // Update the Amount field with the same value as the Total field
     document.getElementById('collector_amount').value = total.toFixed(2);
-    document.getElementById('delivery_boy_amount').value = quantity;
+    document.getElementById('delivery_boy_amount').value = purchase_quantity;
 }
 
-// Call the calculateTotal function when MRP or Quantity changes
-document.getElementById('mrp').oninput = calculateTotal;
-document.getElementById('quantity').oninput = calculateTotal;
+// Call the calculateTotal function when MRP or purchase_Quantity changes
+document.getElementById('purchase_mrp').oninput = calculateTotal;
+document.getElementById('purchase_quantity').oninput = calculateTotal;
+document.getElementById('mrp').oninput = calculateTotal; // To handle the case when MRP changes independently of purchase_quantity
+
 
 /***************************************** automatic field add same as customer *********************************************************/
 

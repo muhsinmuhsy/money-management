@@ -145,7 +145,7 @@
                                     
                 
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Date</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">money type - amount</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> amount</th>
                                     
                                     <th class="text-secondary opacity-7"></th>   
                                     </tr>
@@ -163,7 +163,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <span class="text-secondary text-xs font-weight-bold">{{ collector_order.money_type }} - {{ collector_order.collector_amount }}</span>
+                                                    <span class="text-secondary text-xs font-weight-bold"> {{ collector_order.collector_amount }}</span>
                                                 </td>
                                                 
                                                 <td class="align-middle">
@@ -183,7 +183,7 @@
                                                     {% elif collector_order.wholesaler_name %}
                                                         <a href="" class="text-secondary font-weight-bold text-xs"><i class="fa fa-arrows-h me-2" style="color: black;"></i></a>
                                                     {% endif %}
-                                                    <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye text-dark me-2" ></i></a>                                                  
+                                                    <a href="{% url 'collector_order_view' order_id=collector_order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye  me-2" style="color: blue;"></i></a>                                                  
                                                 </td>
                                             </tr>
                                         

@@ -1,5 +1,6 @@
 from django.db import models
 from U_Auth.models import User
+from decimal import Decimal
 
 # Create your models here.
 
@@ -19,10 +20,10 @@ class Wholesaler(models.Model):
 
 
 class Order(models.Model):
-    MONEY_TYPE = (
-        ('AED to INR' , 'AED to INR'),      
-        ('INR to AED' , 'INR to AED'),
-    )
+    # MONEY_TYPE = (
+    #     ('AED to INR' , 'AED to INR'),      
+    #     ('INR to AED' , 'INR to AED'),
+    # )
     DELIVERY_TYPE = (
         ('HOME' , 'HOME'),
         ('BANK' , 'BANK'),
@@ -36,10 +37,20 @@ class Order(models.Model):
     )
     date = models.DateField(null=True, blank=True)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
-    money_type = models.CharField(max_length=500, choices=MONEY_TYPE, null=True, blank=True)
+    # money_type = models.CharField(max_length=500, choices=MONEY_TYPE, null=True, blank=True)
+    
+    # Purcahse
+    purchase_mrp = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+    purchase_quantity = models.PositiveIntegerField( null=True, blank=True)
+    purchase_total = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+
+    # Sales Information
     mrp = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     quantity = models.PositiveIntegerField( null=True, blank=True)
     total = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+
+    profit = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+
 
     collector_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     collector_name = models.ForeignKey(
@@ -85,6 +96,23 @@ class Order(models.Model):
     comment = models.CharField(max_length=500, null=True, blank=True)
     def __str__ (self):
         return self.name
+    
+
+    def save(self, *args, **kwargs):
+        if self.purchase_total is not None and self.total is not None:
+            try:
+                purchase_total = Decimal(self.purchase_total)
+                total = Decimal(self.total)
+                self.profit = total - purchase_total
+            except (ValueError, TypeError):
+                # Handle the case where purchase_total or total is not a valid number
+                self.profit = None
+        else:
+            self.profit = None
+        super(Order, self).save(*args, **kwargs)
+
+
+        
 
 class DeliveryBoySalary(models.Model):
     delivery_boy_name = models.ForeignKey(

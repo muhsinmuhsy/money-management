@@ -50,7 +50,9 @@
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Purchase Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sales Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Profit</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Boy Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent Status</th>
@@ -82,13 +84,22 @@
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.customer_name }}</span>
                       </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_total }}</span>
+                      </td>
                       
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.total }}</span>
                       </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.profit }}</span>
+                      </td>
+
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</span>
-                    </td>
+                      </td>
                     
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>

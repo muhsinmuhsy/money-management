@@ -65,14 +65,14 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th> -->
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Order</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total INR to AED</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Profit</th>
                       
 
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal AED to INR</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal Debit</th>
                       
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total COllected</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Credit</th>
 
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TOTAL PENDING AMOUNT</th>
+                      
                      
                      
                       
@@ -92,24 +92,20 @@
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ inr_to_aed_count }} </h6>
+                          <h6 class="mb-0 text-sm">{{ profit_count }} </h6>
                         </span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ aed_to_inr_count }} </h6>
+                          <h6 class="mb-0 text-sm">{{ total_debit_total_sum }} </h6>
                         </span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ total_money_collected }} </h6>
+                          <h6 class="mb-0 text-sm">{{ total_credit_money_pending }} </h6>
                         </span>
                       </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ total_money_pending }} </h6>
-                        </span>
-                      </td>
+                      
                       
                       
                       
@@ -145,18 +141,14 @@
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Money Type</th>
-
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Amount</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
-
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Purchase Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sales Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Profit</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
-
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Boy Name</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent Status</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Debit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Credit</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -173,62 +165,56 @@
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.customer_name }}</span>
                       </td>
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_total }}</span>
+                      </td>
                       
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.money_type }}</span>
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.mrp }}</span>
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{ order.quantity }}</span>
-                      </td>
-
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.total }}</span>
                       </td>
-                      
+
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{ order.profit }}</span>
+                      </td>
+
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.collector_name.first_name }} {{ order.collector_name.last_name }}</span>
-                    </td>
-
-                    <td class="align-middle text-center">
-                            
-                      <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
-                      
-                  </td>
-                  <td class="align-middle text-center">
-                      
-                      <span class="text-secondary text-xs font-weight-bold">{{ order.money_pending }} </span>
-                      
-                  </td>
+                      </td>
                     
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
                         <span class="text-secondary text-xs font-weight-bold">{{ order.wholesaler_name.name }}</span>   
                       </td>
                       <td class="align-middle text-center">
-                       
-                        {% if order.delivery_boy_name %}
-                          {% if order.delivery_status == 'PENDING' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs">PENDING</a>
-                          {% endif %} 
-                          {% if order.delivery_status == 'CANCEL' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs">CANCELED</a>
-                          {% endif %} 
-                          {% if order.delivery_status == 'CONFIRM' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs">CONFIRMED</a>
+                        <span class="text-secondary text-xs font-weight-bold">
+                          {% if order.money_collected == 0 %}
+                              Sales
+                          {% else %}
+                              Purchase
                           {% endif %}
-                          {% if order.delivery_status == 'COMPLEATED' %}
-                            <a href="" class="text-secondary font-weight-bold text-xs">COMPLEATED</a>
+                        </span>
+                    </td>
+                    
+                    <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          {% if order.money_collected == 0 %}
+                            {{ order.total }}
+                          {% else %}
+                            
                           {% endif %}
-                        {% elif order.wholesaler_name %}
-                        <a href="" class="text-secondary font-weight-bold text-xs">NONE</a>
+                        </span>
+                    </td>
+                    
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs font-weight-bold">
+                        {% if order.money_collected == 0 %}
+                        {% else %}
+                          {{ order.money_pending }}
                         {% endif %}
-
-                      </td>
+                      </span>
+                        
+                    </td>
                       <td class="align-middle">
                         
                         <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>

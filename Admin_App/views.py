@@ -7,6 +7,10 @@ from Admin_App.models import *
 from django.http import JsonResponse
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
+
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 # Create your views here.
 
 
@@ -107,9 +111,9 @@ def collector_view(request, collector_id):
 
     orders = orders.order_by('-id')
 
-    total_total = sum(order.total for order in orders)
-    total_money_collected = sum(order.money_collected for order in orders)
-    total_money_pending = sum(order.money_pending for order in orders)
+    total_total = sum(order.total if order.total is not None else 0 for order in orders)
+    total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+    total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
 
     context = {
         'collector': collector,
@@ -325,16 +329,58 @@ def customer_view(request, customer_id):
 
     orders = orders.order_by('-id')
 
-    total_total = sum(order.total for order in orders)
-    total_money_collected = sum(order.money_collected for order in orders)
-    total_money_pending = sum(order.money_pending for order in orders)
+    total_credit_money_pending = sum(order.money_pending if order.money_pending is not None else 0 for order in orders)
+
+    total_debit_total_sum = sum(order.total for order in orders if order.money_collected == 0)
+
+    
+    if 'export' in request.GET:
+                response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = 'attachment; filename=orders.xlsx'
+
+                workbook = Workbook()
+                worksheet = workbook.active
+
+                # Write headers
+                headers = ['Customer', 'Date', 'Description', 'Debit', 'Credit']
+                for col_num, header in enumerate(headers, 1):
+                    worksheet.cell(row=1, column=col_num, value=header)
+
+                for col_num in range(1, len(headers) + 1):
+                    column_letter = get_column_letter(col_num)
+                    worksheet.column_dimensions[column_letter].width = 15
+
+                # Write data
+                for row_num, order in enumerate(orders, 2):
+                    worksheet.cell(row=row_num, column=1, value=order.customer_name.name)  # Assuming name is the field representing customer name
+                    worksheet.cell(row=row_num, column=2, value=order.date.strftime('%Y-%m-%d'))  # Convert date to formatted string
+
+                    if order.money_collected == 0:
+                        cell_value = "Sales"
+                    else:
+                        cell_value = "Purchase"
+                    worksheet.cell(row=row_num, column=3, value=cell_value)
+
+                    if order.money_collected == 0:
+                        cell_value_debit = order.total
+                        cell_value_credit = ''
+                    else:
+                        cell_value_debit = ''
+                        cell_value_credit = order.money_pending
+
+                    worksheet.cell(row=row_num, column=4, value=cell_value_debit)
+                    worksheet.cell(row=row_num, column=5, value=cell_value_credit)
+                    
+
+
+                workbook.save(response)
+                return response
 
     context = {
         'customer': customer,
         'orders': orders,
-        'total_total': total_total,
-        'total_money_collected': total_money_collected,
-        'total_money_pending': total_money_pending,
+        'total_credit_money_pending': total_credit_money_pending,
+        'total_debit_total_sum' : total_debit_total_sum,
         'start_date': start_date_str,
         'end_date': end_date_str,
     }
@@ -489,7 +535,11 @@ def order_add(request):
         date = request.POST.get('date') 
         customer_id = request.POST.get('customer_name') 
 
-        money_type = request.POST.get('money_type')
+        # money_type = request.POST.get('money_type')
+
+        purchase_mrp = request.POST.get('purchase_mrp') 
+        purchase_quantity = request.POST.get('purchase_quantity') 
+        purchase_total = request.POST.get('purchase_total')
 
         mrp = request.POST.get('mrp') 
         quantity = request.POST.get('quantity') 
@@ -535,10 +585,15 @@ def order_add(request):
                 date=date,
                 customer_name=customer, 
 
-                money_type=money_type, 
+                # money_type=money_type, 
+
+                purchase_mrp=Decimal(purchase_mrp),
+                purchase_quantity=purchase_quantity,
+                purchase_total=Decimal(purchase_total),
+
                 mrp=Decimal(mrp),
                 quantity=quantity,
-                total=total,
+                total=Decimal(total),
 
                 collector_amount=collector_amount,
                 collector_name=collector,  
@@ -565,16 +620,16 @@ def order_add(request):
                 comment = '',
                 
                 money_collected = 0,
-                money_pending = total
+                money_pending = None
             )
             messages.success(request, f"Order added successfully.")
             return redirect('order_list')
         except IntegrityError:
             messages.error(request, f"Order add Failed.")
             return redirect('order_add')
-        except (TypeError, InvalidOperation):
-            messages.error(request, "Invalid Value. Please provide a valid number.")
-            return redirect('order_add')
+        # except (TypeError, InvalidOperation):
+        #     messages.error(request, "Invalid Value. Please provide a valid number.")
+        #     return redirect('order_add')
         
     context = {
         'customers': customers,
@@ -624,7 +679,9 @@ def order_edit(request, order_id):
         customer_instance = Customer.objects.get(name=customer_id)
         order.customer_name = customer_instance
 
-        
+        order.purchase_mrp = request.POST.get('purchase_mrp') 
+        order.purchase_quantity = request.POST.get('purchase_quantity') 
+        order.purchase_total = request.POST.get('purchase_total') 
 
         order.mrp = request.POST.get('mrp') 
         order.quantity = request.POST.get('quantity') 
@@ -671,7 +728,7 @@ def order_edit(request, order_id):
         order.comment = ''
         
         order.money_collected = 0
-        order.money_pending = order.total
+        order.money_pending = None
         try:
             order.save()
             messages.success(request, f"Order updated successfully.")
@@ -737,28 +794,25 @@ def report(request):
     # Count the total orders within the selected date range
     order_count = orders.count()
 
-    # Count the orders with 'INR to AED' money type within the selected date range
-    inr_to_aed_count = orders.filter(money_type='INR to AED').count()
-
-    # Count the orders with 'AED to INR' money type within the selected date range
-    aed_to_inr_count = orders.filter(money_type='AED to INR').count()
+    
 
     # Count the orders with delivery status 'COMPLEATED' within the selected date range
-    compleated_count = orders.filter(delivery_status='COMPLEATED').count()
+    # compleated_count = orders.filter(delivery_status='COMPLEATED').count()
+    profit_count = sum(order.profit for order in orders )
+    total_credit_money_pending = sum(order.money_pending if order.money_pending is not None else 0 for order in orders)
 
-    total_money_collected = sum(order.money_collected for order in orders)
-    total_money_pending = sum(order.money_pending for order in orders)
+    total_debit_total_sum = sum(order.total for order in orders if order.money_collected == 0)
+    
 
     context = {
         'orders': orders,
         'start_date': start_date_str,
         'end_date': end_date_str,
         'order_count': order_count,
-        'inr_to_aed_count': inr_to_aed_count,
-        'aed_to_inr_count': aed_to_inr_count,
-        'total_money_collected': total_money_collected,
-        'total_money_pending': total_money_pending,
-        'compleated_count': compleated_count,
+        'profit_count' : profit_count,
+        'total_credit_money_pending' : total_credit_money_pending,
+        'total_debit_total_sum' : total_debit_total_sum 
+        
     }
     return render(request, 'Admin/report.html', context)
 

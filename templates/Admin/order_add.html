@@ -67,7 +67,7 @@
 
                                 <!-- Money Type select  --->
 
-                                <div class="col-md-2 mt-3" >
+                                <!-- <div class="col-md-2 mt-3" >
                                     <div class="form-group">
                                         <div class="form-check">
                                             <label class="custom-control-label" for="customRadioDisabled">AED to INR</label>
@@ -82,10 +82,59 @@
                                             <input type="radio" id="InrtoAed" onclick="toggleFormSection()" name="money_type" value="INR to AED" id="customRadioDisabled" required class="form-check-input"  >
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
 
                                 <!--- Calculation -->
+
+                                <h6 class="pt-4">
+                                    Purchase Information
+                                </h6>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Amount</label>
+                                    <input class="form-control" type="text" name="purchase_mrp" id="purchase_mrp" placeholder="Amount">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h6 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">X</h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Quantity</label>
+                                    <input class="form-control" type="number" placeholder="Quantity" name="purchase_quantity" id="purchase_quantity" required   >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <h5 style="margin-top: 37px;
+                                        display: flex;
+                                        justify-content: center;">=</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Total</label>
+                                    <input class="form-control" type="text" name="purchase_total" id="purchase_total"  readonly >
+                                    </div>
+                                </div>
+
+
+
+                                
+                                <h6 class="pt-4">
+                                    Sales information
+                                </h6>
+
 
                                 <div class="col-md-3">
                                     <div class="form-group">
