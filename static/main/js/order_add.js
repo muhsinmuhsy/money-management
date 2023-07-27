@@ -20,6 +20,10 @@ $(document).ready(function() {
     $("#wholesaler_name").select2();
 });
 
+$(document).ready(function() {
+    // Target the select element and apply Select2
+    $("#customer_id").select2();
+});
 
 /***************************************** Calculation Automatixc Amount field add *********************************************************/
 

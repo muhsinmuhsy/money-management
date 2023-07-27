@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  {% include 'nav.html' %}
+  <div class="container-fluid py-4 ">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'collector_list' %}">Collector List</a></li>
+        
+        <li class="breadcrumb-item"><a href="javascript:;">Add</a></li>
+      </ol>
+    </nav>
+    
+    {% for message in messages %}
+      {% if message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible fade show " role="alert">
+          <span class="text-white">{{ message }}</span>
+          <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+      {% if message.tags == 'success' %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+          <span class="alert-text">{{ message }}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    
+    <div class="row">
+      <div class="col-md-12 ">
+        <div class="card">
+          
+          <form method="post" action="{% url 'purchase_add' wholesaler.id %}">
+            {% csrf_token %}
+            <div class="card-body">
+              
+              <div class="row">
+
+                <div class="col-md-6">
+                  <div class="form-group pt-2">
+                    <label for="delivery_boy_name">Delivery Boy Name:</label>
+                    <select id="delivery_boy_name" name="delivery_boy_name" class="form-control">
+                      <option value="" selected disabled>Select a Delivery Boy</option>
+                      {% for delivery_boy in delivery_boys %}
+                        <option value="{{ delivery_boy.id }}">{{ delivery_boy.first_name }} {{ delivery_boy.last_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Date</label>
+                  <input class="form-control" id="date" type="date" name="date"   >
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                  <label for="example-text-input" class="form-control-label">Amount</label>
+                  <input class="form-control" type="text" name="mrp" id="mrp" placeholder="Amount">
+                  </div>
+                </div>
+
+
+                
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <h6 style="margin-top: 37px;
+                        display: flex;
+                        justify-content: center;">X</h6>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Quantity</label>
+                    <input class="form-control" type="number" placeholder="Quantity" name="quantity" id="quantity" required   >
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <h5 style="margin-top: 37px;
+                        display: flex;
+                        justify-content: center;">=</h5>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Total</label>
+                    <input class="form-control" type="text" name="total" id="total"  readonly >
+                    </div>
+                </div>
+
+                
+                                  
+              </div>
+              <div class="card-header pb-0">
+                  <div class="d-flex align-items-center">
+                    <button class="btn btn-primary btn-sm ms-auto" type="submit">Submit</button>
+                  </div>
+                </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      
+    </div>
+      
+  </div>
+  <script>
+    // Function to calculate the total based on MRP and Quantity
+    function calculateTotal() {
+        const mrp = parseFloat(document.getElementById('mrp').value);
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const total = mrp * quantity;
+        document.getElementById('total').value = total.toFixed(2);
+
+    }
+
+    // Call the calculateTotal function when MRP or Quantity changes
+    document.getElementById('mrp').oninput = calculateTotal;
+    document.getElementById('quantity').oninput = calculateTotal;
+  </script>
+
+<script>
+  /***************************************** Date today *********************************************************/
+
+  // Get the current date
+  var currentDate = new Date();
+
+  // Format the date as YYYY-MM-DD
+  var formattedDate = currentDate.toISOString().substr(0, 10);
+
+  // Set the default value of the input field
+  document.getElementById("date").value = formattedDate;
+</script>
+
+
+{% endblock %}

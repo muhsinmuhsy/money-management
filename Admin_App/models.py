@@ -20,10 +20,10 @@ class Wholesaler(models.Model):
 
 
 class Order(models.Model):
-    # MONEY_TYPE = (
-    #     ('AED to INR' , 'AED to INR'),      
-    #     ('INR to AED' , 'INR to AED'),
-    # )
+    DISPLAY = (
+        ('SHOW' , 'SHOW'),      
+        ('UNSHOW' , 'UNSHOW'),
+    )
     DELIVERY_TYPE = (
         ('HOME' , 'HOME'),
         ('BANK' , 'BANK'),
@@ -80,6 +80,9 @@ class Order(models.Model):
     # HOME
     
     wholesaler_name = models.ForeignKey(Wholesaler, on_delete=models.CASCADE, null=True, blank=True)
+    paid = models.BooleanField(default=False)
+    wholesaler_show = models.CharField(max_length=100, choices= DISPLAY, default="UNSHOW")
+    
 
     home_name = models.CharField(max_length=500, null=True, blank=True)
     home_mobile = models.CharField(max_length=500, null=True, blank=True)
@@ -94,6 +97,7 @@ class Order(models.Model):
     # Delivery boy status
     delivery_status = models.CharField(max_length=500, choices=DELIVERY_STATUS, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True, blank=True)
+
     def __str__ (self):
         return self.name
     
@@ -122,3 +126,6 @@ class DeliveryBoySalary(models.Model):
     )
     date = models.DateField(null=True, blank=True)
     salary_amount = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
+
+
+

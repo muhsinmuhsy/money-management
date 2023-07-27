@@ -329,9 +329,11 @@ def customer_view(request, customer_id):
 
     orders = orders.order_by('-id')
 
-    total_credit_money_pending = sum(order.money_pending if order.money_pending is not None else 0 for order in orders)
+    
 
     total_debit_total_sum = sum(order.total for order in orders if order.money_collected == 0)
+    total_credit_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+    total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
 
     
     if 'export' in request.GET:
@@ -358,7 +360,7 @@ def customer_view(request, customer_id):
                     if order.money_collected == 0:
                         cell_value = "Sales"
                     else:
-                        cell_value = "Purchase"
+                        cell_value = "Cash"
                     worksheet.cell(row=row_num, column=3, value=cell_value)
 
                     if order.money_collected == 0:
@@ -366,7 +368,7 @@ def customer_view(request, customer_id):
                         cell_value_credit = ''
                     else:
                         cell_value_debit = ''
-                        cell_value_credit = order.money_pending
+                        cell_value_credit = order.money_collected
 
                     worksheet.cell(row=row_num, column=4, value=cell_value_debit)
                     worksheet.cell(row=row_num, column=5, value=cell_value_credit)
@@ -379,8 +381,9 @@ def customer_view(request, customer_id):
     context = {
         'customer': customer,
         'orders': orders,
-        'total_credit_money_pending': total_credit_money_pending,
+        'total_credit_money_collected': total_credit_money_collected,
         'total_debit_total_sum' : total_debit_total_sum,
+        'total_money_pending' : total_money_pending,
         'start_date': start_date_str,
         'end_date': end_date_str,
     }
@@ -466,37 +469,255 @@ def wholesaler_edit(request, wholesaler_id):
 #     return render(request, 'Admin/wholesaler_view.html', context)
 
 
+
+
+
+# def wholesaler_view(request, wholesaler_id):
+#     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+
+#     # Get the start and end time from the request parameters
+#     start_date_str = request.GET.get('start_date')
+#     end_date_str = request.GET.get('end_date')
+
+#     # Convert the start and end time strings to datetime objects
+#     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+#     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+#     # Filter the orders based on wholesaler and date range
+#     orders = Order.objects.filter(wholesaler_name=wholesaler)
+#     if start_date:
+#         orders = orders.filter(date__gte=start_date)
+#     if end_date:
+#         orders = orders.filter(date__lte=end_date)
+
+#     orders = orders.order_by('-id')
+
+#     total_total = sum(order.total for order in orders)
+
+#     # Retrieve the list of purchases for the wholesaler
+#     purchases = Purchase.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+
+        
+#     if request.method == 'POST':        
+#         # Handle Purchase model changes
+#         if 'purchase_id' in request.POST:
+#             purchase_id = request.POST.get('purchase_id')
+#             try:
+#                 purchase = Purchase.objects.get(id=purchase_id)
+#                 purchase.paid = True
+#                 purchase.save()
+#                 messages.success(request, 'Purchase marked as paid.')
+#             except Purchase.DoesNotExist:
+#                 messages.error(request, 'Purchase not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+        
+#         # Handle Order model changes
+#         if 'order_id' in request.POST:
+#             order_id = request.POST.get('order_id')
+#             try:
+#                 order = Order.objects.get(id=order_id)
+#                 order.paid = True
+#                 order.save()
+#                 messages.success(request, 'Order marked as paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'Order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+
+#         return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+
+#     context = {
+#         'wholesaler': wholesaler,
+#         'orders': orders,
+#         'total_total': total_total,
+#         'start_date': start_date_str,
+#         'end_date': end_date_str,
+#         'purchases': purchases,
+#     }
+#     return render(request, 'Admin/wholesaler_view.html', context)
+
+
+
+# def wholesaler_view(request, wholesaler_id):
+#     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+
+#     # Filter the orders based on wholesaler and date range
+#     orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+   
+
+#     # total_total = sum(order.total for order in orders)
+
+#     # Retrieve the list of purchases for the wholesaler
+#     purchases = Purchase.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+
+        
+#     if request.method == 'POST':        
+#         # Handle Purchase model changes
+#         if 'purchase_id' in request.POST:
+#             purchase_id = request.POST.get('purchase_id')
+#             try:
+#                 purchase = Purchase.objects.get(id=purchase_id)
+#                 purchase.paid = True
+#                 purchase.save()
+#                 messages.success(request, 'Purchase marked as paid.')
+#             except Purchase.DoesNotExist:
+#                 messages.error(request, 'Purchase not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+        
+#         # Handle Order model changes
+#         if 'order_id' in request.POST:
+#             order_id = request.POST.get('order_id')
+#             try:
+#                 order = Order.objects.get(id=order_id)
+#                 order.paid = True
+#                 order.save()
+#                 messages.success(request, 'Order marked as paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'Order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+
+#         return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+
+#     context = {
+#         'wholesaler': wholesaler,
+#         'orders': orders,
+#         # 'total_total': total_total,
+#         'purchases': purchases,
+#     }
+#     return render(request, 'Admin/wholesaler_view.html', context)
+
+
+
+# def wholesaler_view(request, wholesaler_id):
+#     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+
+#     # Filter the orders based on wholesaler and date range
+#     orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+   
+
+#     # total_total = sum(order.total for order in orders)
+
+#     # Retrieve the list of purchases for the wholesaler
+#     purchases = Purchase.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+
+        
+#     if request.method == 'POST':        
+#         # Handle Purchase model changes
+#         if 'purchase_id' in request.POST:
+#             purchase_id = request.POST.get('purchase_id')
+#             try:
+#                 purchase = Purchase.objects.get(id=purchase_id)
+#                 purchase.paid = True  # Mark the purchase as paid
+#                 purchase.save()
+#                 messages.success(request, 'Purchase marked as paid.')
+#             except Purchase.DoesNotExist:
+#                 messages.error(request, 'Purchase not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+    
+#         if 'not_paid_purchase_id' in request.POST:
+#             not_paid_purchase_id = request.POST.get('not_paid_purchase_id')
+#             try:
+#                 purchase = Purchase.objects.get(id=not_paid_purchase_id)
+#                 purchase.paid = False  # Mark the purchase as not paid
+#                 purchase.save()
+#                 messages.success(request, 'Purchase marked as not paid.')
+#             except Purchase.DoesNotExist:
+#                 messages.error(request, 'Purchase not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+        
+
+#         # Handle Order model changes
+#         if 'order_id' in request.POST:
+#             order_id = request.POST.get('order_id')
+#             try:
+#                 order = Order.objects.get(id=order_id)
+#                 order.paid = True
+#                 order.save()
+#                 messages.success(request, 'Order marked as paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'Order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+        
+
+#         if 'not_paid_order_id' in request.POST:
+#             not_paid_order_id = request.POST.get('not_paid_order_id')
+#             try:
+#                 order = Order.objects.get(id=not_paid_order_id)
+#                 order.paid = False  # Mark the order as not paid
+#                 order.save()
+#                 messages.success(request, 'order marked as not paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+
+#         return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+
+#     context = {
+#         'wholesaler': wholesaler,
+#         'orders': orders,
+#         # 'total_total': total_total,
+#         'purchases': purchases,
+#     }
+#     return render(request, 'Admin/wholesaler_view.html', context)
+
+
+
 def wholesaler_view(request, wholesaler_id):
     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
-
-    # Get the start and end time from the request parameters
-    start_date_str = request.GET.get('start_date')
-    end_date_str = request.GET.get('end_date')
-
-    # Convert the start and end time strings to datetime objects
-    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
-    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
-
-    # Filter the orders based on wholesaler and date range
-    orders = Order.objects.filter(wholesaler_name=wholesaler)
-    if start_date:
-        orders = orders.filter(date__gte=start_date)
-    if end_date:
-        orders = orders.filter(date__lte=end_date)
-
-    orders = orders.order_by('-id')
-
-    total_total = sum(order.total for order in orders)
     
+    # Filter the orders based on wholesaler and date range
+    orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+    
+    debit_total = sum(order.purchase_total for order in orders if not order.paid)
+    credit_total = sum(order.purchase_total for order in orders if order.paid)
+    if request.method == 'POST':        
+        
+  
+
+        # Handle Order model changes
+        if 'order_id' in request.POST:
+            order_id = request.POST.get('order_id')
+            try:
+                order = Order.objects.get(id=order_id)
+                order.paid = True
+                order.save()
+                messages.success(request, 'Order marked as paid.')
+            except Order.DoesNotExist:
+                messages.error(request, 'Order not found.')
+            except Exception as e:
+                messages.error(request, str(e))
+        
+
+        if 'not_paid_order_id' in request.POST:
+            not_paid_order_id = request.POST.get('not_paid_order_id')
+            try:
+                order = Order.objects.get(id=not_paid_order_id)
+                order.paid = False  # Mark the order as not paid
+                order.save()
+                messages.success(request, 'order marked as not paid.')
+            except Order.DoesNotExist:
+                messages.error(request, 'order not found.')
+            except Exception as e:
+                messages.error(request, str(e))
+
+        return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
 
     context = {
         'wholesaler': wholesaler,
         'orders': orders,
-        'total_total': total_total,
-        'start_date': start_date_str,
-        'end_date': end_date_str,
+        'debit_total' : debit_total,
+        'credit_total' : credit_total
+        
     }
     return render(request, 'Admin/wholesaler_view.html', context)
+
 
 @login_required
 def wholesaler_delete(request, wholesaler_id):
@@ -627,9 +848,9 @@ def order_add(request):
         except IntegrityError:
             messages.error(request, f"Order add Failed.")
             return redirect('order_add')
-        # except (TypeError, InvalidOperation):
-        #     messages.error(request, "Invalid Value. Please provide a valid number.")
-        #     return redirect('order_add')
+        except (TypeError, InvalidOperation):
+            messages.error(request, "Invalid Value. Please provide a valid number.")
+            return redirect('order_add')
         
     context = {
         'customers': customers,
@@ -774,47 +995,264 @@ def order_delete(request, order_id):
 # ---------------------------------------------- Report -------------------------------------------------------- #
 
 
-@login_required
+# @login_required
+# def report(request):
+#     # Get the start and end time from the request parameters
+#     start_date_str = request.GET.get('start_date')
+#     end_date_str = request.GET.get('end_date')
+
+#     # Convert the start and end time strings to datetime objects
+#     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+#     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+#     # Filter the orders based on date range
+#     orders = Order.objects.all().order_by('-id')
+#     if start_date:
+#         orders = orders.filter(date__gte=start_date)
+#     if end_date:
+#         orders = orders.filter(date__lte=end_date)
+
+#     # Count the total orders within the selected date range
+#     order_count = orders.count()
+
+#     profit_count = sum(order.profit for order in orders )
+    
+#     total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+#     total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
+
+#     context = {
+#         'orders': orders,
+#         'start_date': start_date_str,
+#         'end_date': end_date_str,
+#         'order_count': order_count,
+#         'profit_count' : profit_count,
+#         'total_money_collected' : total_money_collected,
+#         'total_money_pending' : total_money_pending
+        
+        
+#     }
+#     return render(request, 'Admin/report.html', context)
+
+
+
+# @login_required
+# def report(request):
+#     customers = Customer.objects.all()
+#     # Get the start and end time from the request parameters
+#     start_date_str = request.GET.get('start_date')
+#     end_date_str = request.GET.get('end_date')
+    
+#     # Get the customer ID from the request parameters
+#     customer_id = request.GET.get('customer_id')  # Assuming the parameter name is 'customer_id'
+
+#     # Convert the start and end time strings to datetime objects
+#     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+#     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+#     # Filter the orders based on date range and customer
+#     orders = Order.objects.all().order_by('-id')
+#     if start_date:
+#         orders = orders.filter(date__gte=start_date)
+#     if end_date:
+#         orders = orders.filter(date__lte=end_date)
+#     if customer_id:
+#         orders = orders.filter(customer_name__id=customer_id)
+
+#     # Count the total orders within the selected date range and customer
+#     order_count = orders.count()
+
+#     profit_count = sum(order.profit for order in orders)
+#     total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+#     total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
+
+#     context = {
+#         'orders': orders,
+#         'start_date': start_date_str,
+#         'end_date': end_date_str,
+#         'order_count': order_count,
+#         'profit_count': profit_count,
+#         'total_money_collected': total_money_collected,
+#         'total_money_pending': total_money_pending,
+#         'customers': customers,
+#     }
+#     return render(request, 'Admin/report.html', context)
+
+
+
+# @login_required
+# def report(request):
+#     customers = Customer.objects.all()
+#     # Get the start and end time from the request parameters
+#     start_date_str = request.GET.get('start_date')
+#     end_date_str = request.GET.get('end_date')
+    
+#     # Get the customer ID from the request parameters
+#     customer_id = request.GET.get('customer_id')  # Assuming the parameter name is 'customer_id'
+
+#     # Convert the start and end time strings to datetime objects
+#     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+#     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+#     # Filter the orders based on date range and customer
+#     orders = Order.objects.all().order_by('-id')
+#     if start_date:
+#         orders = orders.filter(date__gte=start_date)
+#     if end_date:
+#         orders = orders.filter(date__lte=end_date)
+#     if customer_id:
+#         orders = orders.filter(customer_name__id=customer_id)
+
+#     # Count the total orders within the selected date range and customer
+#     order_count = orders.count()
+
+#     profit_count = sum(order.profit for order in orders)
+#     total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+#     total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
+
+#     if 'export' in request.GET:
+#                 response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#                 response['Content-Disposition'] = 'attachment; filename=orders.xlsx'
+
+#                 workbook = Workbook()
+#                 worksheet = workbook.active
+
+#                 # Write headers
+#                 headers = ['Customer', 'Date', 'Purchase Total', 'Sales Total', 'Profit', 'Collector Agent', 'Delivery Agent', 'Collected', 'Pending',]
+#                 for col_num, header in enumerate(headers, 1):
+#                     worksheet.cell(row=1, column=col_num, value=header)
+
+#                 for col_num in range(1, len(headers) + 1):
+#                     column_letter = get_column_letter(col_num)
+#                     worksheet.column_dimensions[column_letter].width = 15
+
+#                 # Write data
+#                 for row_num, order in enumerate(orders, 2):
+#                     worksheet.cell(row=row_num, column=1, value=order.customer_name.name)  # Assuming name is the field representing customer name
+#                     worksheet.cell(row=row_num, column=2, value=order.date.strftime('%Y-%m-%d'))  # Convert date to formatted string
+#                     worksheet.cell(row=row_num, column=3, value=order.purchase_total)
+#                     worksheet.cell(row=row_num, column=4, value=order.total)
+#                     worksheet.cell(row=row_num, column=5, value=order.profit)
+
+#                     collector_full_name = f"{order.collector_name.first_name} {order.collector_name.last_name}"
+#                     worksheet.cell(row=row_num, column=6, value=collector_full_name)
+                    
+#                     delivery_boy_full_name = f"{order.delivery_boy_name.first_name} {order.delivery_boy_name.last_name}"
+#                     worksheet.cell(row=row_num, column=7, value=delivery_boy_full_name)
+
+#                     worksheet.cell(row=row_num, column=8, value=order.money_collected)
+
+#                     if order.money_pending == None:
+#                         cell_value = order.total
+#                     else:
+#                         cell_value = order.money_pending
+#                     worksheet.cell(row=row_num, column=9, value=cell_value)
+
+#                 workbook.save(response)
+#                 return response
+
+#     context = {
+#         'orders': orders,
+#         'start_date': start_date_str,
+#         'end_date': end_date_str,
+#         'order_count': order_count,
+#         'profit_count': profit_count,
+#         'total_money_collected': total_money_collected,
+#         'total_money_pending': total_money_pending,
+#         'customers': customers,
+#     }
+#     return render(request, 'Admin/report.html', context)
+
+
+
 def report(request):
+    customers = Customer.objects.all()
     # Get the start and end time from the request parameters
     start_date_str = request.GET.get('start_date')
     end_date_str = request.GET.get('end_date')
+    
+    # Get the customer ID from the request parameters
+    customer_id = request.GET.get('customer_id')
 
     # Convert the start and end time strings to datetime objects
     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
 
-    # Filter the orders based on date range
+    # Filter the orders based on date range and customer
     orders = Order.objects.all().order_by('-id')
     if start_date:
         orders = orders.filter(date__gte=start_date)
     if end_date:
         orders = orders.filter(date__lte=end_date)
+    if customer_id:
+        orders = orders.filter(customer_name__id=customer_id)
 
-    # Count the total orders within the selected date range
+    orders = orders.exclude(wholesaler_name__isnull=False)
+
+    # Count the total orders within the selected date range and customer
     order_count = orders.count()
-
+    profit_count = sum(order.profit for order in orders)
+    total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
+    total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
     
 
-    # Count the orders with delivery status 'COMPLEATED' within the selected date range
-    # compleated_count = orders.filter(delivery_status='COMPLEATED').count()
-    profit_count = sum(order.profit for order in orders )
-    total_credit_money_pending = sum(order.money_pending if order.money_pending is not None else 0 for order in orders)
 
-    total_debit_total_sum = sum(order.total for order in orders if order.money_collected == 0)
-    
+
+
+    if 'export' in request.GET:
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=orders.xlsx'
+
+        workbook = Workbook()
+        worksheet = workbook.active
+
+        # Write headers
+        headers = ['Customer', 'Date', 'Purchase Total', 'Sales Total', 'Profit', 'Collector Agent', 'Delivery Agent', 'Collected', 'Pending']
+        for col_num, header in enumerate(headers, 1):
+            worksheet.cell(row=1, column=col_num, value=header)
+
+        for col_num in range(1, len(headers) + 1):
+            column_letter = get_column_letter(col_num)
+            worksheet.column_dimensions[column_letter].width = 15
+
+        # Write data
+        for row_num, order in enumerate(orders, 2):
+            worksheet.cell(row=row_num, column=1, value=order.customer_name.name)
+            worksheet.cell(row=row_num, column=2, value=order.date.strftime('%Y-%m-%d'))
+            worksheet.cell(row=row_num, column=3, value=order.purchase_total)
+            worksheet.cell(row=row_num, column=4, value=order.total)
+            worksheet.cell(row=row_num, column=5, value=order.profit)
+
+            collector_full_name = f"{order.collector_name.first_name} {order.collector_name.last_name}"
+            worksheet.cell(row=row_num, column=6, value=collector_full_name)
+                    
+            delivery_boy_full_name = f"{order.delivery_boy_name.first_name} {order.delivery_boy_name.last_name}"
+            worksheet.cell(row=row_num, column=7, value=delivery_boy_full_name)
+
+            worksheet.cell(row=row_num, column=8, value=order.money_collected)
+
+            if order.money_pending is None:
+                cell_value = order.total
+            else:
+                cell_value = order.money_pending
+            worksheet.cell(row=row_num, column=9, value=cell_value)
+
+        workbook.save(response)
+        return response
 
     context = {
         'orders': orders,
         'start_date': start_date_str,
         'end_date': end_date_str,
         'order_count': order_count,
-        'profit_count' : profit_count,
-        'total_credit_money_pending' : total_credit_money_pending,
-        'total_debit_total_sum' : total_debit_total_sum 
-        
+        'profit_count': profit_count,
+        'total_money_collected': total_money_collected,
+        'total_money_pending': total_money_pending,
+        'customers': customers,
+        'selected_customer_id': int(customer_id) if customer_id else None,
     }
     return render(request, 'Admin/report.html', context)
+
+
 
 
 # ---------------------------------------------- Delivery Boy Salery -------------------------------------------------------- #
@@ -876,3 +1314,69 @@ def salary_delivery_boy_delete(request, salary_id):
     except IntegrityError:
             messages.error(request, f"Salary Delete Failed.")
             return redirect('salary_delivery_boy_salary_list', delivery_boy_id=salary.delivery_boy_name.id)
+    
+
+# ---------------------------------------------- Purchase -------------------------------------------------------- #
+
+
+
+def purchase_add(request, wholesaler_id):
+    try:
+        wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    except Wholesaler.DoesNotExist:
+        messages.error(request, f"Wholesaler with ID {wholesaler_id} does not exist.")
+        return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+
+    delivery_boys = User.objects.filter(is_delivery_boy=True)
+
+    if request.method == 'POST':
+        # Handle form submission
+        delivery_boy_id = request.POST.get('delivery_boy_name')
+        date = request.POST.get('date')
+        purchase_mrp = request.POST.get('mrp')
+        purchase_quantity = request.POST.get('quantity')
+        purchase_total = request.POST.get('total')
+
+        try:
+            delivery_boy = User.objects.get(id=delivery_boy_id)
+        except User.DoesNotExist:
+            messages.error(request, f"Delivery boy with ID {delivery_boy_id} does not exist.")
+            return redirect('purchase_add', wholesaler_id=wholesaler_id)
+
+        # Create and save the Purchase object
+        try:
+            purchase = Order(
+                wholesaler_name=wholesaler,
+                delivery_boy_name=delivery_boy,
+                purchase_mrp=Decimal(purchase_mrp),
+                purchase_quantity=purchase_quantity,
+                purchase_total=Decimal(purchase_total),
+                date=date,
+                wholesaler_show = 'SHOW',
+
+                
+
+            )
+            purchase.save()
+            messages.success(request, f"Purchase Add successfully.")
+            return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+        except IntegrityError:
+            messages.error(request, f" Failed.")
+            return redirect('purchase_add')
+        except (TypeError, InvalidOperation):
+            messages.error(request, "Invalid Value. Please provide a valid number.")
+            return redirect('purchase_add')
+
+       
+
+    context = {
+        'delivery_boys': delivery_boys,
+        'wholesaler': wholesaler,  # Pass the 'wholesaler' object to the template context
+    }
+    return render(request, 'Admin/purchase_add.html', context)
+
+
+
+
+
+

@@ -40,9 +40,22 @@
                         <label for="end_date">End Date:</label>
                         <input class="form-control" type="date" name="end_date" value="{{ end_date }}">
                     </div>
-            
-                    <div class="col-md-4 pt-5">
-                        <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
+
+                    <div class="col-md-4">
+                      <label for="customer_id">Customer:</label>
+                      <select id="customer_id" name="customer_id" class="form-control">
+                        <option value="">All Customers</option>
+                        {% for customer in customers %}
+                          <option value="{{ customer.id }}" {% if customer.id == selected_customer_id %}selected{% endif %}>{{ customer.name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                    <div class="col-md-2 ">
+                        <button class="btn btn-secondary btn-sm" type="submit">Filter</button>
+                    </div>
+                    <div class="col-md-8 ">
+                      <input type="submit" class="btn btn-success btn-sm" name="export" value="Export to Excel" onclick="return confirm('Do you Want to Download this sheet as Excel ?')">
                     </div>
                 </form>
             </div>
@@ -68,9 +81,9 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Profit</th>
                       
 
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal Debit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal Collected</th>
                       
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Credit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Pending</th>
 
                       
                      
@@ -97,12 +110,12 @@
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ total_debit_total_sum }} </h6>
+                          <h6 class="mb-0 text-sm">{{ total_money_collected }} </h6>
                         </span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                          <h6 class="mb-0 text-sm">{{ total_credit_money_pending }} </h6>
+                          <h6 class="mb-0 text-sm">{{ total_money_pending }} </h6>
                         </span>
                       </td>
                       
@@ -144,17 +157,18 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Purchase Total</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sales Total</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Profit</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collector Name</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Boy Name</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Debit</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Credit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected Agent </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent</th>
+                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Collected</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   
                   <tbody>
                     {% for order in orders %}
+                    {% if order.wholesaler_show == 'UNSHOW' %}
                     <tr>
                       
                       <td class="align-middle text-center">
@@ -186,34 +200,20 @@
                         <span class="text-secondary text-xs font-weight-bold">{{ order.delivery_boy_name.first_name }} {{ order.delivery_boy_name.last_name }} </span>
                         <span class="text-secondary text-xs font-weight-bold">{{ order.wholesaler_name.name }}</span>   
                       </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">
-                          {% if order.money_collected == 0 %}
-                              Sales
-                          {% else %}
-                              Purchase
-                          {% endif %}
-                        </span>
-                    </td>
-                    
+                      
                     <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">
-                          {% if order.money_collected == 0 %}
-                            {{ order.total }}
-                          {% else %}
-                            
-                          {% endif %}
-                        </span>
+                      
+                      <span class="text-secondary text-xs font-weight-bold">{{ order.money_collected }}</span>
+                       
                     </td>
-                    
                     <td class="align-middle text-center">
                       <span class="text-secondary text-xs font-weight-bold">
-                        {% if order.money_collected == 0 %}
+                        {% if order.money_pending == None %}
+                          {{ order.total }}
                         {% else %}
-                          {{ order.money_pending }}
+                          {{ order.money_pending }} 
                         {% endif %}
                       </span>
-                        
                     </td>
                       <td class="align-middle">
                         
@@ -223,7 +223,7 @@
                       </td>
                     </tr>
                    
-                    
+                    {% endif %}
                     {% endfor %}
                   </tbody>
                   

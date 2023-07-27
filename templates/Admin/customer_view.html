@@ -41,11 +41,11 @@
                             <input class="form-control" type="date" name="end_date" value="{{ end_date }}">
                         </div>
                 
-                        <div class="col-md-4 pt-5">
+                        <div class="col-md-2 customer_view_btn">
                             <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
                         </div>
-                        <div class="col-md-4 ">
-                          <input type="submit" class="btn btn-success" name="export" value="Export to Excel" onclick="return confirm('Do you Want to Download this sheet as Excel ?')">
+                        <div class="col-md-2 customer_view_btn ">
+                          <input type="submit" class="btn btn-success btn-sm" name="export" value="Export to Excel" onclick="return confirm('Do you Want to Download this sheet as Excel ?')">
                       </div>
                     </form>
                 </div>
@@ -58,16 +58,12 @@
             
 
             <div class="row mb-3">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <!-- <div class="card-header pb-0 d-flex align-items-center">
                         <h6 class="mb-0">Orders List</h6>
                     </div> -->
                 </div>
-                <div class="col-md-2">
-                    <!-- <div class="card-header pb-0 d-flex align-items-center">
-                      <span class="text-secondary text-xss font-weight-bold" > {{ total_total }}</span>
-                    </div> -->
-                </div>
+                
 
                 <div class="col-md-3">
                     <div class="card-header pb-0 d-flex align-items-center">
@@ -78,9 +74,15 @@
                 <div class="col-md-3">
                     <div class="card-header pb-0 d-flex align-items-center">
                         <h6 class="mb-0">Credit Total : </h6>
-                        <span class="text-secondary text-xss font-weight-bold" style="padding-left: 5px;" > {{ total_credit_money_pending }}</span>
+                        <span class="text-secondary text-xss font-weight-bold" style="padding-left: 5px;" > {{ total_credit_money_collected }}</span>
                     </div>
                 </div>
+                <div class="col-md-3">
+                  <div class="card-header pb-0 d-flex align-items-center">
+                      <h6 class="mb-0">Pending : </h6>
+                      <span class="text-secondary text-xss font-weight-bold" style="padding-left: 5px;" > {{ total_money_pending }}</span>
+                  </div>
+              </div>
             </div>
             
             
@@ -91,7 +93,7 @@
                     <tr>
                       
 
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order Date</th>
                       
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
                       
@@ -117,7 +119,7 @@
                               {% if order.money_collected == 0 %}
                                   Sales
                               {% else %}
-                                  Purchase
+                                  Cash
                               {% endif %}
                             </span>
                         </td>
@@ -129,15 +131,21 @@
                               {% else %}
                                 
                               {% endif %}
+                              
                             </span>
                         </td>
                         
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold">
-                            {% if order.money_collected == 0 %}
+                            <!-- {% if order.money_collected == 0 %}
                             {% else %}
                               {{ order.money_pending }}
+                            {% endif %} -->
+                            {% if order.money_collected == 0 %}
+                            {% else %}
+                            {{ order.money_collected }}
                             {% endif %}
+                            
                           </span>
                             
                         </td>

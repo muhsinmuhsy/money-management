@@ -1,0 +1,8 @@
+.customer_view_btn{
+    padding-top: 45px;
+}
+@media (max-width: 992px) {
+    .customer_view_btn{
+        padding-top: 0px;
+    }  
+}

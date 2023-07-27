@@ -28,12 +28,14 @@
             </div>
             {% endif %}
         {% endfor %}
+
+
         
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4 ">
                     <div class="row">
-                        
+                    
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Date</h6>
@@ -49,13 +51,29 @@
 
                         <hr class="horizontal dark">
 
-                        <div class="col-md-12 ">
+                        
+
+                        <h6 style="padding-left: 30px;">Purchase Information</h6>
+                        <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
-                                <h6>{{ order.money_type }}</h6>
-                                     
+                                <h6>Amount</h6>
+                                <p>{{ order.purchase_mrp }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Quantiy</h6>
+                                <p>{{ order.purchase_quantity }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="container mt-3 mb-5 ">
+                                <h6>Total</h6>
+                                <p>{{ order.purchase_total }}</p>
                             </div>
                         </div>
                         
+                        <h6 style="padding-left: 30px;">Sales Information</h6>
                         <div class="col-md-4 ">
                             <div class="container mt-3 mb-5 ">
                                 <h6>Amount</h6>
@@ -125,7 +143,11 @@
                             <div class="container mt-3 mb-5 ">
                                 <h6>Pending</h6>
                                 
-                                <p>{{ order.money_pending }} </p>
+                                <p>{% if order.money_pending == None %}
+                                    {{ order.total }}
+                                  {% else %}
+                                    {{ order.money_pending }} 
+                                  {% endif %} </p>
                                 
                             </div>
                         </div>
@@ -288,6 +310,7 @@
                 </div>
             </div>
         </div>
+       
     
     </div>
 {% endblock %}

@@ -2,253 +2,281 @@
 {% load static %}
 {% block content %}
     {% include 'nav.html' %}
-    
     <div class="container-fluid py-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'order_list' %}">Order List</a></li>
-            <li class="breadcrumb-item"><a href="javascript:;">Order Details</a></li>
-            </ol>
-        </nav>
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-            <div class="alert alert-danger alert-dismissible fade show " role="alert">
-                <span class="text-white">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endif %}
-            {% if message.tags == 'success' %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <span class="text-white">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endif %}
-        {% endfor %}
-        
-        <div class="row">
-            <div class="col-12">
-                <div class="card mb-4 min-vh-70">
-                    <div class="row">
-                        
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Date</h6>
-                                <p>{{ order.date }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer</h6>
-                                <p>{{ order.customer_name }}</p>
-                            </div>
-                        </div>
-
-                        <hr class="horizontal dark">
-
-                        <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>{{ order.money_type }}</h6>
-                                     
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>amount</h6>
-                                <p>{{ order.mrp }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Quantit</h6>
-                                <p>{{ order.quantity }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Total</h6>
-                                <p>{{ order.total }}</p>
-                            </div>
-                        </div>
-                        <hr class="horizontal dark">
-                        <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Collection Agent</h6>
-                                <p>{{ order.collector_name }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Name</h6>
-                                <p>{{ order.name }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Moble</h6>
-                                <p>{{ order.mobile }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Customer Address</h6>
-                                <p>{{ order.address }}</p>
-                            </div>
-                        </div>
-                        <hr class="horizontal dark">
-                        <div class="col-md-2 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Delivery Agent</h6>
-                                <p>{{ order.delivery_boy_name }}</p>
-                            </div>
-                        </div>
-                        
-                        
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'wholesaler_list' %}">wholesalers</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">{{ wholesaler.name }} </a></li>
+        </ol>
+      </nav>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="text-white">{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+      <!-- <div class="row">
+        <div class="col-12">
+            <div class="card mb-2 pt-2 pb-2 p-3"> 
+                <form method="get" class="row g-3 align-items-center">
+                    <div class="col-md-4">
+                        <label for="start_date">Start Date:</label>
+                        <input class="form-control" type="date" id="start_date" name="start_date" value="{{ start_date }}">
                     </div>
-                    {% if order.delivery_type == 'HOME' %}
-                        <div class="row">
-                            <div class="col-md-12 ">
-                                
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="container ">
-                                    <h6>Home Name</h6>
-                                    <p>{{ order.home_name }}</p>
-                                    
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="container ">
-                                    <h6>Mobile</h6>
-                                    <p>{{ order.home_mobile }}</p>
-                                    
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="container ">
-                                    <h6>Address</h6>
-                                    <p>{{ order.address }}</p>
-                                    
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-4">
-                                <div class="container ">
-                                    <h6>Quantity</h6>
-                                    <p>{{ order.quantity }}</p>
-                                    
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="container ">
-                                    <h6 >Toatal</h6>
-                                    <p>{{ order.total }}</p>
-                                    
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 ">
-                                <div class="container mt-3 mb-5 ">
-                                    <h6>Status</h6>
-                                    <p>{{ order.confirm_cancel_pending}}</p>
-                                </div>
-                            </div>
-                            {% if order.comment != '' %}
-                                <div class="col-md-12 ">
-                                    <div class="container mt-3 mb-5 ">
-                                        <h6>Cancel Review</h6>
-                                        <p>{{ order.comment}}</p>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            
-
-                        </div>
-                    {% elif order.delivery_type == 'BANK' %}
-                    <div class="row">
-                        <div class="col-md-12 ">
-                           
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6>Person Name</h6>
-                                <p>{{ order.person_name }}</p>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6>Bank Name</h6>
-                                <p>{{ order.bank_name }}</p>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6>Account</h6>
-                                <p>{{ order.account }}</p>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6>IFSE</h6>
-                                <p>{{ order.ifse }}</p>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6>Quantity</h6>
-                                <p>{{ order.quantity }}</p>
-                                
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="container ">
-                                <h6 >Toatal</h6>
-                                <p>{{ order.total }}</p>
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 ">
-                            <div class="container mt-3 mb-5 ">
-                                <h6>Status</h6>
-                                <p>{{ order.confirm_cancel_pending}}</p>
-                            </div>
-                        </div>
-                        {% if order.comment != '' %}
-                            <div class="col-md-12 ">
-                                <div class="container mt-3 mb-5 ">
-                                    <h6>Cancel Review</h6>
-                                    <p>{{ order.comment}}</p>
-                                </div>
-                            </div>
-                        {% endif %}
-                        
-
+                    
+                    <div class="col-md-4">
+                        <label for="end_date">End Date:</label>
+                        <input class="form-control" type="date" id="end_date" name="end_date" value="{{ end_date }}">
                     </div>
-                    {% endif %}
-                    
-                    
-                    
-                </div>
+            
+                    <div class="col-md-4 pt-5">
+                        <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
+                    </div>
+                </form>
             </div>
         </div>
-    
+      </div> -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4 min-vh-70">
+
+            <div class="card-header pb-0 d-flex align-items-center">
+              <h6 class="mb-0">List</h6>
+              <a href="{% url 'purchase_add' wholesaler.id %}" class="ms-auto">
+                <button class="btn btn-primary btn-sm " >Purcahse</button>
+              </a>
+              
+            </div>
+
+
+            
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Amount</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Debit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Credit</th>
+                      <th class="text-secondary opacity-7"></th>
+                      
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+                    {% for order in orders %}
+                    <tr>
+                      
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                            <h6 class="mb-0 text-sm">{{ order.date }} </h6>
+                            </span>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.customer_name }}</span>
+                        </td>
+
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if order.delivery_boy_name == None %}
+
+                            {% else %}
+                              {{ order.delivery_boy_name }}
+                            {% endif %}
+                          </span>
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_mrp }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_quantity }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_total }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.paid == True %}
+                              Cash
+                              {% else %}
+                              Sale
+                              {% endif %}
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if order.paid == True %}
+                              
+                              {% else %}
+                              {{ order.purchase_total }}
+                            {% endif %}
+                          </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if order.paid == True %}
+                              {{ order.purchase_total }}
+                            {% else %}
+                              
+                            {% endif %}
+                          </span>
+                        </td>
+                        
+                        <td class="align-middle">
+                          {% if order.paid == True %}
+                            <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="not_paid_order_id" value="{{ order.id }}">
+                              <button type="submit" class="btn btn-danger btn-sm" style="padding-left: 23px;
+                              padding-right: 23px;">Un Paid</button>
+                              <span style="padding-left: 5px;">
+                                <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs "><i class="fa fa-eye me-2" style="color: blue;"></i></a>
+                              </span>
+                            </form>
+                          {% else %}
+
+                            <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
+                              {% csrf_token %}
+
+                              <input type="hidden" name="order_id" value="{{ order.id }}">
+                              <button type="submit" class="btn btn-success btn-sm">Paid</button>
+                              <span style="padding-left: 5px;">
+                                <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs "><i class="fa fa-eye me-2" style="color: blue;"></i></a>
+                              </span>
+                            </form>
+                          {% endif %}
+
+                          
+                          
+                            
+                        </td>
+                      
+                    </tr>
+                   
+                    
+                    {% endfor %}
+
+                    {% for purchase in wholesaler.purchase_set.all %}
+                    <tr>
+                      
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                            <h6 class="mb-0 text-sm"></h6>
+                            </span>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold"></span>
+                        </td>
+
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {{ purchase.delivery_boy_name }}
+                          </span>
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ purchase.mrp }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ purchase.quantity }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ purchase.total }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if purchase.paid == True %}
+                              Cash
+                              {% else %}
+                              Sale
+                              {% endif %}
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if purchase.paid == True %}
+                              
+                              {% else %}
+                              {{ purchase.total }}
+                            {% endif %}
+                          </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            {% if purchase.paid == True %}
+                              {{ purchase.total }}
+                            {% else %}
+                            
+                            {% endif %}
+                          </span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            
+                              <div class="col-sm-2">
+                                {% if purchase.paid == True %}
+
+                                  <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="not_paid_purchase_id" value="{{ purchase.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="padding-left: 23px;
+                                    padding-right: 23px;">Un Paid</button>
+                                  </form>
+                              
+                                {% else %}
+                                  <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="purchase_id" value="{{ purchase.id }}">
+                                    <button type="submit" class="btn btn-success btn-sm">Paid</button>
+
+                                  </form>
+                                {% endif %}
+                                
+                              
+
+                          </span>
+                        </td>
+                        
+                    </tr>
+                   
+                    
+                    {% endfor %}
+                  </tbody>
+                  
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        
+      </div>
+      
     </div>
+  </main>
 {% endblock %}
-
-
+ 

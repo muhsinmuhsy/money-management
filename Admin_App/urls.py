@@ -52,4 +52,9 @@ urlpatterns = [
     path('salary_delivery_boy_list/', salary_delivery_boy_list, name='salary_delivery_boy_list'),
     path('salary_delivery_boy_salary_list/<int:delivery_boy_id>/', salary_delivery_boy_salary_list, name='salary_delivery_boy_salary_list'),
     path('salary_delivery_boy_delete/<int:salary_id>/', salary_delivery_boy_delete, name='salary_delivery_boy_delete'),
+
+    # ---------------------------------------------- Purchase -------------------------------------------------------- #
+    path('purchase_add/<int:wholesaler_id>/', purchase_add, name='purchase_add'),
+    
+    
 ]   

@@ -14,3 +14,4 @@ class OrderModelAdmin(admin.ModelAdmin):
 @admin.register(DeliveryBoySalary)
 class DeliveryBoySalaryModelAdmin(admin.ModelAdmin):
     list_display = [field.name for field in DeliveryBoySalary._meta.fields]
+
