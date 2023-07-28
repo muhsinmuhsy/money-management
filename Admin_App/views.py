@@ -688,7 +688,7 @@ def wholesaler_view(request, wholesaler_id):
                 order = Order.objects.get(id=order_id)
                 order.paid = True
                 order.save()
-                messages.success(request, 'Order marked as paid.')
+                messages.success(request, ' marked as paid.')
             except Order.DoesNotExist:
                 messages.error(request, 'Order not found.')
             except Exception as e:
@@ -701,7 +701,7 @@ def wholesaler_view(request, wholesaler_id):
                 order = Order.objects.get(id=not_paid_order_id)
                 order.paid = False  # Mark the order as not paid
                 order.save()
-                messages.success(request, 'order marked as not paid.')
+                messages.success(request, ' marked as not paid.')
             except Order.DoesNotExist:
                 messages.error(request, 'order not found.')
             except Exception as e:
@@ -737,11 +737,34 @@ def wholesaler_delete(request, wholesaler_id):
 
 # ---------------------------------------------- Order -------------------------------------------------------- #
 
+# @login_required
+# def order_list(request):
+#     order = Order.objects.all().order_by('-id')
+#     context = {
+#         'order' : order,
+#     }
+#     return render(request, 'Admin/order_list.html', context)
+
 @login_required
 def order_list(request):
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+    
+
+    # Convert the start and end time strings to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
+
+    # Filter the orders based on date range and customer
     order = Order.objects.all().order_by('-id')
+    if start_date:
+        order = order.filter(date__gte=start_date)
+    if end_date:
+        order = order.filter(date__lte=end_date)
     context = {
         'order' : order,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
     return render(request, 'Admin/order_list.html', context)
 
@@ -985,10 +1008,10 @@ def order_delete(request, order_id):
 
     try:
         order.delete()
-        messages.success(request, f"order Delete successfully.")
+        messages.success(request, f" Delete successfully.")
         return redirect('order_list')
     except IntegrityError:
-            messages.error(request, f"Order Delete Failed.")
+            messages.error(request, f" Delete Failed.")
             return redirect('order_list')
     
 
@@ -1340,7 +1363,7 @@ def purchase_add(request, wholesaler_id):
         try:
             delivery_boy = User.objects.get(id=delivery_boy_id)
         except User.DoesNotExist:
-            messages.error(request, f"Delivery boy with ID {delivery_boy_id} does not exist.")
+            messages.error(request, f"Please select a Delivery Agent")
             return redirect('purchase_add', wholesaler_id=wholesaler_id)
 
         # Create and save the Purchase object

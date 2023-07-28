@@ -27,6 +27,31 @@
           </div>
         {% endif %}
       {% endfor %}
+
+      <div class="row">
+        <div class="col-12">
+            <div class="card mb-1 pt-1 pb-1 p-2"> 
+                <form method="get" class="row g-3 align-items-center">
+                    <div class="col-md-4 ">
+                        <label for="start_date">Start Date:</label>
+                        <input class="form-control" type="date" name="start_date" value="{{ start_date }}">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="end_date">End Date:</label>
+                        <input class="form-control" type="date" name="end_date" value="{{ end_date }}">
+                    </div>
+
+                    
+                    <div class="col-md-2 customer_view_btn ">
+                        <button class="btn btn-secondary btn-sm" type="submit">Filter</button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+            
+      </div>
       
       <div class="row">
         <div class="col-12">

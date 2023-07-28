@@ -98,10 +98,10 @@ class Order(models.Model):
     delivery_status = models.CharField(max_length=500, choices=DELIVERY_STATUS, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True, blank=True)
 
-    def __str__ (self):
-        return self.name
+    def __str__(self):
+        return f"Order #{self.id}"
     
-
+    # profit saving
     def save(self, *args, **kwargs):
         if self.purchase_total is not None and self.total is not None:
             try:
