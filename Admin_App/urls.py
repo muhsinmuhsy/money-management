@@ -31,6 +31,8 @@ urlpatterns = [
     path('wholesaler_add/', wholesaler_add, name='wholesaler_add'),
     path('wholesaler_edit/<int:wholesaler_id>/', wholesaler_edit, name='wholesaler_edit'),
     path('wholesaler_view/<int:wholesaler_id>/', wholesaler_view, name='wholesaler_view'),
+    path('wholesaler_paid/<int:wholesaler_id>/', wholesaler_paid, name='wholesaler_paid'),
+
     path('wholesaler_delete/<int:wholesaler_id>/', wholesaler_delete, name='wholesaler_delete'),
 
     # ---------------------------------------------- Order -------------------------------------------------------- #

@@ -11,6 +11,7 @@ from django.utils import timezone
 
 @login_required
 def dashboard(request):
+    
     order_count = Order.objects.count()
     customer_count = Customer.objects.count()
     collector_count = User.objects.filter(is_collector=True).count()
@@ -21,7 +22,7 @@ def dashboard(request):
 
     # Filter orders for today and sum up the money_collected field
     # total_money_collected_today = Order.objects.filter(date=today).aggregate(total_money_collected=models.Sum('money_collected'))['total_money_collected']
-    order_count_today = Order.objects.filter(date=today).count()
+    order_count_today = Order.objects.exclude(customer_name=None).filter(date=today).count()
     
 
     collector_orders = Order.objects.filter(collector_name=request.user).order_by('-id')

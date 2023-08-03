@@ -67,6 +67,8 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Toal Debit</th>
                       
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Credit</th>
+
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Balance</th>
                       
                     </tr>
                   </thead>
@@ -86,7 +88,11 @@
                           <h6 class="mb-0 text-sm">{{ credit_total }} </h6>
                         </span>
                       </td>
-       
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <h6 class="mb-0 text-sm">{{ balance }} </h6>
+                        </span>
+                      </td>
                     </tr>
    
                   </tbody>
@@ -103,11 +109,18 @@
 
             <div class="card-header pb-0 d-flex align-items-center">
               <h6 class="mb-0">List</h6>
-              <a href="{% url 'purchase_add' wholesaler.id %}" class="ms-auto">
-                <button class="btn btn-primary btn-sm " >Purcahse</button>
-              </a>
-              
+            
+              <div class="ms-auto d-flex">
+                <a href="{% url 'wholesaler_paid' wholesaler.id %}" class="me-2">
+                  <button class="btn btn-primary btn-sm">Paid</button>
+                </a>
+            
+                <a href="{% url 'purchase_add' wholesaler.id %}">
+                  <button class="btn btn-primary btn-sm">Purchase</button>
+                </a>
+              </div>
             </div>
+            
 
 
             
@@ -119,8 +132,8 @@
                       
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Agent</th>
+                      
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Customer or Delivery Agent</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Amount</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Purcahase Total</th>
@@ -142,17 +155,15 @@
                             </span>
                         </td>
                         
-                        <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">
-                              {% if order.customer_name == None %}
-                              {% else %}
-                              {{ order.customer_name }}
-                              {% endif %}
-                            </span>
-                        </td>
+                        
 
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold">
+                            {% if order.customer_name == None %}
+                              {% else %}
+                              {{ order.customer_name }}
+                            {% endif %}
+
                             {% if order.delivery_boy_name == None %}
                               {% else %}
                               {{ order.delivery_boy_name }}
@@ -164,17 +175,34 @@
                         
 
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_mrp }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_quantity }}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ order.purchase_total }}</span>
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.purchase_mrp == None %}
+                              {% else %}
+                                {{ order.purchase_mrp }}
+                              {% endif %}
+                            </span>
                         </td>
                         <td class="align-middle text-center">
                             <span class="text-secondary text-xs font-weight-bold">
-                              {% if order.paid == True %}
+                              {% if order.purchase_quantity == None %}
+                              {% else %}
+                              {{ order.purchase_quantity }}
+                              {% endif %}
+                              
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.purchase_total == None %}
+                              {% else %}
+                                {{ order.purchase_total }}
+                              {% endif %}
+                              
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">
+                              {% if order.wholesaler_paid  %}
                               Cash
                               {% else %}
                               Sale
@@ -183,7 +211,7 @@
                         </td>
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold">
-                            {% if order.paid == True %}
+                            {% if order.purchase_total == None %}
                               
                               {% else %}
                               {{ order.purchase_total }}
@@ -192,46 +220,27 @@
                         </td>
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold">
-                            {% if order.paid == True %}
-                              {{ order.purchase_total }}
-                            {% else %}
+                            {% if order.wholesaler_paid == None %}
                               
+                            {% else %}
+                            {{ order.wholesaler_paid }}
                             {% endif %}
                           </span>
                         </td>
-                        
+
                         <td class="align-middle">
-                          {% if order.paid == True %}
-                            <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
-                              {% csrf_token %}
-                              <input type="hidden" name="not_paid_order_id" value="{{ order.id }}">
-                              <button type="submit" class="btn btn-danger btn-sm" style="padding-left: 23px;
-                              padding-right: 23px;">Un Paid</button>
-                              <span style="padding-left: 5px;">
-                                <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs "><i class="fa fa-eye me-2" style="color: blue;"></i></a>
-                              </span>
-                            </form>
+                        
+                          
+                          {% if order.wholesaler_paid == None and order.customer_name != None %}
+                              <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs"><i class="fa fa-eye me-2" style="color: blue;"></i></a>
                           {% else %}
-
-                            <form method="post" action="{% url 'wholesaler_view' wholesaler_id=wholesaler.id %}">
-                              {% csrf_token %}
-
-                              <input type="hidden" name="order_id" value="{{ order.id }}">
-                              <button type="submit" class="btn btn-success btn-sm">Paid</button>
-                              <span style="padding-left: 5px;">
-                                <a href="{% url 'order_view' order.id %}" class="text-secondary font-weight-bold text-xs "><i class="fa fa-eye me-2" style="color: blue;"></i></a>
-                              </span>
-                              <span style="padding-left: 5px;">
-                                <a href="{% url 'order_delete' order.id %}" onclick="return confirm('Are you sure you want to delete this?')" class="text-danger font-weight-bold text-xs"><i class="far fa-trash-alt me-2"></i></a>
-                              </span>
-                            </form>
+                              <a href="{% url 'order_delete' order.id %}" onclick="return confirm('Are you sure you want to delete this?')" class="text-danger font-weight-bold text-xs"><i class="far fa-trash-alt me-2"></i></a>
                           {% endif %}
 
-                          
-                          
-                            
+
                         </td>
-                      
+                        
+                        
                     </tr>
                    
                     

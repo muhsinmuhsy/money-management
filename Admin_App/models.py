@@ -80,7 +80,7 @@ class Order(models.Model):
     # HOME
     
     wholesaler_name = models.ForeignKey(Wholesaler, on_delete=models.CASCADE, null=True, blank=True)
-    paid = models.BooleanField(default=False)
+    wholesaler_paid = models.DecimalField(max_digits=50, decimal_places=2, null=True, blank=True)
     wholesaler_show = models.CharField(max_length=100, choices= DISPLAY, default="UNSHOW")
     
 

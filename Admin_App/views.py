@@ -669,55 +669,102 @@ def wholesaler_edit(request, wholesaler_id):
 
 
 
+# def wholesaler_view(request, wholesaler_id):
+#     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    
+#     # Filter the orders based on wholesaler and date range
+#     orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
+    
+#     debit_total = sum(order.purchase_total for order in orders if not order.paid)
+#     credit_total = sum(order.purchase_total for order in orders if order.paid)
+#     if request.method == 'POST':        
+        
+  
+
+#         # Handle Order model changes
+#         if 'order_id' in request.POST:
+#             order_id = request.POST.get('order_id')
+#             try:
+#                 order = Order.objects.get(id=order_id)
+#                 order.paid = True
+#                 order.save()
+#                 messages.success(request, ' marked as paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'Order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+        
+
+#         if 'not_paid_order_id' in request.POST:
+#             not_paid_order_id = request.POST.get('not_paid_order_id')
+#             try:
+#                 order = Order.objects.get(id=not_paid_order_id)
+#                 order.paid = False  # Mark the order as not paid
+#                 order.save()
+#                 messages.success(request, ' marked as not paid.')
+#             except Order.DoesNotExist:
+#                 messages.error(request, 'order not found.')
+#             except Exception as e:
+#                 messages.error(request, str(e))
+
+#         return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+
+#     context = {
+#         'wholesaler': wholesaler,
+#         'orders': orders,
+#         'debit_total' : debit_total,
+#         'credit_total' : credit_total
+        
+#     }
+#     return render(request, 'Admin/wholesaler_view.html', context)
+
 def wholesaler_view(request, wholesaler_id):
     wholesaler = Wholesaler.objects.get(id=wholesaler_id)
     
     # Filter the orders based on wholesaler and date range
     orders = Order.objects.filter(wholesaler_name=wholesaler).order_by('-id')
     
-    debit_total = sum(order.purchase_total for order in orders if not order.paid)
-    credit_total = sum(order.purchase_total for order in orders if order.paid)
-    if request.method == 'POST':        
-        
   
+    debit_total = sum(order.purchase_total or 0 for order in orders)
 
-        # Handle Order model changes
-        if 'order_id' in request.POST:
-            order_id = request.POST.get('order_id')
-            try:
-                order = Order.objects.get(id=order_id)
-                order.paid = True
-                order.save()
-                messages.success(request, ' marked as paid.')
-            except Order.DoesNotExist:
-                messages.error(request, 'Order not found.')
-            except Exception as e:
-                messages.error(request, str(e))
-        
+    credit_total = sum(order.wholesaler_paid or 0 for order in orders)
 
-        if 'not_paid_order_id' in request.POST:
-            not_paid_order_id = request.POST.get('not_paid_order_id')
-            try:
-                order = Order.objects.get(id=not_paid_order_id)
-                order.paid = False  # Mark the order as not paid
-                order.save()
-                messages.success(request, ' marked as not paid.')
-            except Order.DoesNotExist:
-                messages.error(request, 'order not found.')
-            except Exception as e:
-                messages.error(request, str(e))
+    balance = debit_total - credit_total
 
-        return redirect('wholesaler_view', wholesaler_id=wholesaler_id)
+    
+    
 
     context = {
         'wholesaler': wholesaler,
         'orders': orders,
         'debit_total' : debit_total,
-        'credit_total' : credit_total
+        'credit_total' : credit_total,
+        'balance' : balance
         
     }
     return render(request, 'Admin/wholesaler_view.html', context)
 
+@login_required
+def wholesaler_paid(request, wholesaler_id):
+    wholesaler = Wholesaler.objects.get(id=wholesaler_id)
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        wholesaler_paid = request.POST.get('wholesaler_paid')
+        try:
+            Order.objects.create(
+                wholesaler_name=wholesaler,
+                date=date,
+                wholesaler_paid=Decimal(wholesaler_paid)
+            )
+            messages.success(request, 'Paid added Succesfully')
+            return redirect('wholesaler_view', wholesaler_id=wholesaler.id)
+        except IntegrityError:
+            messages.error(request,'Paid added Field')
+            return redirect('wholesaler_paid', wholesaler_id=wholesaler.id)
+        except (TypeError, InvalidOperation):
+            messages.error(request, "Invalid Value. Please provide a valid number.")
+            return redirect('wholesaler_paid', wholesaler_id=wholesaler.id)
+    return render(request, 'Admin/wholesaler_paid.html')
 
 @login_required
 def wholesaler_delete(request, wholesaler_id):
@@ -1200,8 +1247,8 @@ def report(request):
     start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else None
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
 
-    # Filter the orders based on date range and customer
-    orders = Order.objects.all().order_by('-id')
+    # dont get customer is none
+    orders = Order.objects.exclude(customer_name=None).order_by('-id')
     if start_date:
         orders = orders.filter(date__gte=start_date)
     if end_date:
@@ -1209,14 +1256,17 @@ def report(request):
     if customer_id:
         orders = orders.filter(customer_name__id=customer_id)
 
-    orders = orders.exclude(wholesaler_name__isnull=False)
+    # orders = orders.exclude(wholesaler_name__isnull=False)
+
+    
+
 
     # Count the total orders within the selected date range and customer
     order_count = orders.count()
     profit_count = sum(order.profit for order in orders)
     total_money_collected = sum(order.money_collected if order.money_collected is not None else 0 for order in orders)
     total_money_pending = sum(order.money_pending if order.money_pending is not None else order.total for order in orders)
-    
+    total_sale = sum(order.total for order in orders)
 
 
 
@@ -1268,6 +1318,7 @@ def report(request):
         'end_date': end_date_str,
         'order_count': order_count,
         'profit_count': profit_count,
+        'total_sale' : total_sale,
         'total_money_collected': total_money_collected,
         'total_money_pending': total_money_pending,
         'customers': customers,
@@ -1378,7 +1429,6 @@ def purchase_add(request, wholesaler_id):
                 wholesaler_show = 'SHOW',
 
                 
-
             )
             purchase.save()
             messages.success(request, f"Purchase Add successfully.")
@@ -1388,7 +1438,7 @@ def purchase_add(request, wholesaler_id):
             return redirect('purchase_add')
         except (TypeError, InvalidOperation):
             messages.error(request, "Invalid Value. Please provide a valid number.")
-            return redirect('purchase_add')
+            return redirect('purchase_add', wholesaler_id=wholesaler_id)
 
        
 
