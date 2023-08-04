@@ -803,7 +803,7 @@ def order_list(request):
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else None
 
     # Filter the orders based on date range and customer
-    order = Order.objects.all().order_by('-id')
+    order = Order.objects.exclude(customer_name=None).order_by('-id')
     if start_date:
         order = order.filter(date__gte=start_date)
     if end_date:
